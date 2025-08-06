@@ -14,6 +14,7 @@ const App: FC = () => {
           Get Started <ArrowRight />{' '}
         </a>
       </Button>
+      <Button variant="outline">Button</Button>
     </div>
   )
 }
