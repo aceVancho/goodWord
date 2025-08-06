@@ -18,7 +18,7 @@ import { ArrowRight } from 'lucide-react'
 
 const App: FC = () => {
   return (
-    <div className="w-full h-screen flex flex-col px-5 space-y-8 items-center justify-center">
+    <div className="w-full h-screen flex flex-col px-5 space-y-8 ">
       {/* <h1 className="text-5xl font-bold text-center">
         Electron-Vite template with ShadcnUI and Tailwindcss
       </h1>
