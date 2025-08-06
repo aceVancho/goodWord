@@ -7,7 +7,8 @@ import {
   BookType,
   KeyboardMusic,
   NotepadText,
-  Moon
+  Moon,
+  Sun
 } from "lucide-react"
 
 import {
@@ -20,6 +21,21 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "./components/ui/command"
+import { ThemeProvider, useTheme } from './context/theme-provider'
+
+export function CommandItem_ThemeBtn() {
+  const { setTheme, theme } = useTheme()
+  return (
+        <div onClick={() => {
+          setTheme(theme === "dark" ? "light" : "dark")
+        }}>
+        <CommandItem >
+          {theme === "dark" ? <Sun /> : <Moon />}
+          {theme === "dark" ? <span>Light Mode</span> : <span>Dark Mode</span>}
+        </CommandItem>
+      </div>
+  )
+}
 
 export function CommandDemo() {
   return (
@@ -62,11 +78,7 @@ export function CommandDemo() {
             <span>Settings</span>
             {/* <CommandShortcut>⌘S</CommandShortcut> */}
           </CommandItem>
-          <CommandItem>
-            <Moon />
-            <span>Dark Mode</span>
-            {/* <CommandShortcut>⌘S</CommandShortcut> */}
-          </CommandItem>
+          <CommandItem_ThemeBtn />
         </CommandGroup>
       </CommandList>
     </Command>
@@ -77,7 +89,9 @@ export function CommandDemo() {
 const App: FC = () => {
   return (
     <div className="w-full h-screen">
-      <CommandDemo />
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <CommandDemo />
+      </ThemeProvider>
     </div>
   )
 }
