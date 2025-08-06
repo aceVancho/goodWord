@@ -14,14 +14,26 @@ function createMenuOverlayWindow() {
     height: 400,
     x,
     y,
-    frame: false,
-    resizable: false,
-    alwaysOnTop: true,
-    skipTaskbar: true,
-    // transparent: false,
+    // frame: false,
+    // transparent: true,
+    // resizable: true,
+
+    backgroundMaterial: 'acrylic', // Optional: Use acrylic effect
+    // alwaysOnTop: true,
+    // skipTaskbar: true,
+    show: true,
     // vibrancy: undefined,
     // visualEffectState: 'inactive', // optional
-    show: true,
+    // hasShadow: false,          // 💥 removes the drop shadow
+    vibrancy: 'popover',  // optional, or remove for full transparency
+    backgroundColor: '#00000000', // fully transparent
+    transparent: true,
+    resizable: false,
+    frame: false,
+    skipTaskbar: true,
+    // thickFrame: false,
+    // roundedCorners: false,
+    title: 'Uxon Dynamics Updater',
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js.js'),
     },
@@ -31,7 +43,7 @@ function createMenuOverlayWindow() {
   if (!app.isPackaged) {
     win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/menu.html`)
     console.log('Loading menu.html from packaged app')
-    // win.webContents.openDevTools({ mode: 'detach' }) // Uncomment for devTools on state
+    win.webContents.openDevTools({ mode: 'detach' }) // Uncomment for devTools on state
   } else {
     // win.loadFile(path.join(__dirname, '../../out/menu.html'))
     win.loadFile(join(__dirname, '../renderer/index.html'))
