@@ -16,7 +16,6 @@ const simulateCopyFn = async () => {
 
 
 async function createMenuOverlayWindow() {
-  const copiedText = await simulateCopyFn();
   const { x, y } = screen.getCursorScreenPoint()
   const win = new BrowserWindow({
     width: 300,
@@ -73,6 +72,16 @@ async function createMenuOverlayWindow() {
   return win
 }
 
+const initMenu = async () => {
+    console.log('Initiating Menu Window');
+    const copiedText = await simulateCopyFn();
+    const menu = await createMenuOverlayWindow()
+    menu.webContents.on('did-finish-load', () => {
+      console.log('index.ts: copiedText => preload:', copiedText);
+      menu.webContents.send('copy-text', copiedText)
+    })
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -95,14 +104,7 @@ app.whenReady().then(() => {
   //   if (BrowserWindow.getAllWindows().length === 0) createWindow()
   // })
 
-    globalShortcut.register('Option+Space', async () => {
-    console.log('Shift+Space is pressed')
-    const menu = await createMenuOverlayWindow()
-    menu.webContents.on('did-finish-load', () => {
-
-      menu.webContents.send('copy-text', '!!!TEST WORDS!!!')
-    })
-  })
+  globalShortcut.register('Option+Space', initMenu)
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

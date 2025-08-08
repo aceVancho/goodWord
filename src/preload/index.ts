@@ -2,14 +2,13 @@ import { ipcRenderer } from 'electron';
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload';
 
-console.log('Preload script loaded');
+console.log('Preload script loaded successfully');
 
 const api = {
     onCopyText: (callback: (text: string) => void) => {
-    console.log('onCopyText in preload')
     // callback('Test send of onCopyText outside ipcRenderer.on')
     ipcRenderer.on('copy-text', (_, text) => {
-      console.log('Received text in preload from main:', text);
+      console.log('preload.js: => onCopyText:', text);
       callback(text);
     });
   }

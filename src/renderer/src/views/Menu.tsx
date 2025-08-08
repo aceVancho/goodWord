@@ -31,7 +31,6 @@ declare global {
 }
 
 export function Menu() {
-  console.log('Menu component renderer')
     useEffect(() => {
     window.api?.onCopyText((text) => {
       console.log('Menu.tsx => onCopyText:', text);
