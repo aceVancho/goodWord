@@ -19,12 +19,25 @@ import {
 } from "../components/ui/command"
 import { ThemeBtn } from "@renderer/components/ui/themeBtn"
 import { useNavigate } from "react-router-dom"
+import { useEffect } from "react";
 
-Command
 
-
+declare global {
+  interface Window {
+    api: {
+      onCopyText: (callback: (text: string) => void) => void;
+    };
+  }
+}
 
 export function Menu() {
+  console.log('Menu component renderer')
+    useEffect(() => {
+    window.api?.onCopyText((text) => {
+      console.log('Received text from main (onCopyText):', text);
+      // Do something with the text, like set it in state
+    });
+  }, []);
   const navigate = useNavigate();
   return (
     <Command className="rounded-lg border shadow-md md:min-w-[450px]">

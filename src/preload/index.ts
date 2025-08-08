@@ -1,8 +1,19 @@
+import { ipcRenderer } from 'electron';
 import { contextBridge } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
+import { electronAPI } from '@electron-toolkit/preload';
 
-// Custom APIs for renderer
-const api = {}
+console.log('Preload script loaded');
+
+const api = {
+    onCopyText: (callback: (text: string) => void) => {
+    console.log('onCopyText in preload')
+    callback('Test send of onCopyText outside ipcRenderer.on')
+    ipcRenderer.on('copy-text', (_, text) => {
+      console.log('Received text in preload from main:', text);
+      callback(text);
+    });
+  }
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
