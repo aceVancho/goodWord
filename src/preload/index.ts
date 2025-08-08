@@ -7,7 +7,7 @@ console.log('Preload script loaded');
 const api = {
     onCopyText: (callback: (text: string) => void) => {
     console.log('onCopyText in preload')
-    callback('Test send of onCopyText outside ipcRenderer.on')
+    // callback('Test send of onCopyText outside ipcRenderer.on')
     ipcRenderer.on('copy-text', (_, text) => {
       console.log('Received text in preload from main:', text);
       callback(text);

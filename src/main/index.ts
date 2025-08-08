@@ -16,9 +16,8 @@ const simulateCopyFn = async () => {
 
 
 async function createMenuOverlayWindow() {
-  const { x, y } = screen.getCursorScreenPoint()
   const copiedText = await simulateCopyFn();
-
+  const { x, y } = screen.getCursorScreenPoint()
   const win = new BrowserWindow({
     width: 300,
     height: 400,
@@ -35,6 +34,8 @@ async function createMenuOverlayWindow() {
     title: 'goodword.ai',
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
+      contextIsolation: false,
+      nodeIntegration: true,
     },
     // frame: false,
     // transparent: true,
@@ -97,7 +98,10 @@ app.whenReady().then(() => {
     globalShortcut.register('Option+Space', async () => {
     console.log('Shift+Space is pressed')
     const menu = await createMenuOverlayWindow()
-    menu.webContents.send('copy-text', 'words')
+    menu.webContents.on('did-finish-load', () => {
+
+      menu.webContents.send('copy-text', '!!!TEST WORDS!!!')
+    })
   })
 })
 

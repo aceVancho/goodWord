@@ -34,7 +34,7 @@ export function Menu() {
   console.log('Menu component renderer')
     useEffect(() => {
     window.api?.onCopyText((text) => {
-      console.log('Received text from main (onCopyText):', text);
+      console.log('Menu.tsx => onCopyText:', text);
       // Do something with the text, like set it in state
     });
   }, []);
