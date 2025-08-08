@@ -5,6 +5,7 @@ import {
   BookType,
   KeyboardMusic,
   NotepadText,
+  LucideUnlockKeyhole
 } from "lucide-react"
 
 import {
@@ -45,12 +46,12 @@ export function Menu() {
         <CommandGroup heading="Writing">
           <CommandItem>
            <MessageSquareMore />
-            <span>Phraseology</span>
+            <span>Phraseology & Tone</span>
             {/* <CommandShortcut>⌘P</CommandShortcut> */}
           </CommandItem>
           <CommandItem>
-            <NotepadText />
-            <span>Tone Templates</span>
+            <LucideUnlockKeyhole />
+            <span>Translate Meaning</span>
             {/* <CommandShortcut>⌘B</CommandShortcut> */}
           </CommandItem>
         </CommandGroup>
