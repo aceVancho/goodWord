@@ -1,10 +1,23 @@
 import path from 'path'
-import { app, BrowserWindow, globalShortcut, screen } from 'electron'
+import { app, BrowserWindow, globalShortcut, screen, clipboard } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
+import { keyboard, Key } from '@nut-tree-fork/nut-js';
 
-function createMenuOverlayWindow() {
+const simulateCopyFn = async () => {
+  // Simulate Cmd+C (on macOS)
+  await keyboard.pressKey(Key.LeftSuper); // 'Super' = Command on mac
+  await keyboard.type(Key.C);
+  await keyboard.releaseKey(Key.LeftSuper);
+  const text = clipboard.readText();
+  console.log('Copied text:', text);
+  return text;
+}
+
+
+async function createMenuOverlayWindow() {
   const { x, y } = screen.getCursorScreenPoint()
+  const copiedText = await simulateCopyFn();
 
   const win = new BrowserWindow({
     width: 300,
@@ -19,9 +32,9 @@ function createMenuOverlayWindow() {
     resizable: false,
     frame: false,
     skipTaskbar: true,
-    title: 'Uxon Dynamics Updater',
+    title: 'goodword.ai',
     webPreferences: {
-      preload: path.join(__dirname, '../preload/index.js.js'),
+      preload: path.join(__dirname, '../preload/index.js'),
     },
     // frame: false,
     // transparent: true,
@@ -39,7 +52,7 @@ function createMenuOverlayWindow() {
   if (!app.isPackaged) {
     win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/menu.html`)
     console.log('Loading menu.html from packaged app')
-    // win.webContents.openDevTools({ mode: 'detach' }) // Uncomment for devTools on state
+    win.webContents.openDevTools({ mode: 'detach' }) // Uncomment for devTools on state
   } else {
     // win.loadFile(path.join(__dirname, '../../out/menu.html'))
     win.loadFile(join(__dirname, '../renderer/index.html'))
@@ -81,9 +94,10 @@ app.whenReady().then(() => {
   //   if (BrowserWindow.getAllWindows().length === 0) createWindow()
   // })
 
-    globalShortcut.register('Option+Space', () => {
+    globalShortcut.register('Option+Space', async () => {
     console.log('Shift+Space is pressed')
-    createMenuOverlayWindow()
+    const menu = await createMenuOverlayWindow()
+    menu.webContents.send('copy-text', 'words')
   })
 })
 
