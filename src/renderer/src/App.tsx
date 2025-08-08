@@ -1,34 +1,20 @@
 import { FC } from 'react'
-
-import {
-  Settings,
-  MessageSquareMore,
-  BookA,
-  BookType,
-  KeyboardMusic,
-  NotepadText,
-  Moon,
-  Sun
-} from "lucide-react"
-
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut,
-} from "./components/ui/command"
+import { BrowserRouter, Route, Routes, Navigate, HashRouter } from 'react-router-dom';
 import { ThemeProvider, useTheme } from './context/theme-provider'
 import { Menu } from './views/Menu'
+import { Thesaurus } from './views/Thesaurus';
+import 'animate.css';
 
 const App: FC = () => {
   return (
     <div className="w-full h-screen">
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <Menu />
+        <HashRouter>
+          <Routes>
+            <Route path="/" element={<Menu />} />
+            <Route path="/thesaurus" element={<Thesaurus />} />
+          </Routes>
+        </HashRouter>
       </ThemeProvider>
     </div>
   )

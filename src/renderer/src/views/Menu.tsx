@@ -18,10 +18,14 @@ import {
   CommandSeparator,
 } from "../components/ui/command"
 import { ThemeBtn } from "@renderer/components/ui/themeBtn"
+import { useNavigate } from "react-router-dom"
 
 Command
 
+
+
 export function Menu() {
+  const navigate = useNavigate();
   return (
     <Command className="rounded-lg border shadow-md md:min-w-[450px]">
     {/* <Command className="rounded-lg border shadow-md md:min-w-[450px]"> */}
@@ -33,10 +37,12 @@ export function Menu() {
             <BookA />
             <span>Dictionary</span>
           </CommandItem>
-          <CommandItem>
-            <BookType />
-            <span>Thesaurus</span>
-          </CommandItem>
+          <div onClick={() => navigate('/thesaurus')}>
+            <CommandItem>
+              <BookType />
+              <span>Thesaurus</span>
+            </CommandItem>
+          </div>
           <CommandItem>
             <KeyboardMusic />
             <span>Rhyme</span>

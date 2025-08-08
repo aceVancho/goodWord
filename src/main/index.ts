@@ -1,10 +1,11 @@
 import path from 'path'
-import { app, shell, BrowserWindow, globalShortcut, screen } from 'electron'
+import { app, shell, BrowserWindow, globalShortcut, screen, clipboard } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
 function createMenuOverlayWindow() {
+  
   // const { width, height } = screen.getPrimaryDisplay().bounds
   const { x, y } = screen.getCursorScreenPoint()
 
