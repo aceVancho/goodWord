@@ -29,7 +29,7 @@ declare global {
 	}
 }
 
-export function Menu() {
+export function Menu(): JSX.Element {
 	useEffect(() => {
 		window.api?.onCopyText(text => {
 			console.log('Menu.tsx => onCopyText:', text)
