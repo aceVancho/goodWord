@@ -21,13 +21,13 @@ import { ThemeBtn } from '@renderer/components/ui/themeBtn'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
-declare global {
-	interface Window {
-		api: {
-			onCopyText: (callback: (text: string) => void) => void
-		}
-	}
-}
+// declare global {
+// 	interface Window {
+// 		api: {
+// 			onCopyText: (callback: (text: string) => void) => void
+// 		}
+// 	}
+// }
 
 export function Menu(): JSX.Element {
 	useEffect(() => {
