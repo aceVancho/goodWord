@@ -5,7 +5,8 @@ import {
 	BookType,
 	KeyboardMusic,
 	NotepadText,
-	LucideUnlockKeyhole
+	LucideUnlockKeyhole,
+	Search
 } from 'lucide-react'
 
 import {
@@ -19,30 +20,33 @@ import {
 } from '../components/ui/command'
 import { ThemeBtn } from '@renderer/components/ui/themeBtn'
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
-
-// declare global {
-// 	interface Window {
-// 		api: {
-// 			onCopyText: (callback: (text: string) => void) => void
-// 		}
-// 	}
-// }
+import { useEffect, useState } from 'react'
 
 export function Menu(): JSX.Element {
+  const navigate = useNavigate()
+	const [copiedText, setCopiedText] = useState<string>('')
 	useEffect(() => {
 		window.api?.onCopyText(text => {
 			console.log('Menu.tsx => onCopyText:', text)
-			// Do something with the text, like set it in state
+			setCopiedText(text)
 		})
 	}, [])
-	const navigate = useNavigate()
+	const truncateText = (text: string, maxChars: number): string => {
+		if (text.length <= maxChars) return text
+		return text.slice(0, maxChars) + '…'
+	}
 	return (
 		<Command className='rounded-lg border shadow-md md:min-w-[450px]'>
 			{/* <Command className="rounded-lg border shadow-md md:min-w-[450px]"> */}
-			<CommandInput placeholder='Type a command or search...' />
+			{/* <CommandInput placeholder={`${copiedText}`} /> */}
+			<CommandItem className='ml-1'>
+				<Search />
+				<span className='ml-1 text-sm text-muted-foreground'>
+					{truncateText(copiedText, 30)}
+				</span>
+			</CommandItem>
 			<CommandList>
-				<CommandEmpty>No results found.</CommandEmpty>
+				{/* <CommandEmpty>No results found.</CommandEmpty> */}
 				<CommandGroup heading='Language'>
 					<CommandItem>
 						<BookA />

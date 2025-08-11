@@ -14,7 +14,7 @@ const simulateCopyFn = async () => {
 	return text
 }
 
-async function createMenuOverlayWindow() {
+async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 	const { x, y } = screen.getCursorScreenPoint()
 	const win = new BrowserWindow({
 		width: 300,
@@ -51,7 +51,7 @@ async function createMenuOverlayWindow() {
 	if (!app.isPackaged) {
 		win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/menu.html`)
 		console.log('Loading menu.html from packaged app')
-		win.webContents.openDevTools({ mode: 'detach' }) // Uncomment for devTools on state
+		// win.webContents.openDevTools({ mode: 'detach' }) // Uncomment for devTools on state
 	} else {
 		// win.loadFile(path.join(__dirname, '../../out/menu.html'))
 		win.loadFile(join(__dirname, '../renderer/index.html'))
@@ -71,7 +71,7 @@ async function createMenuOverlayWindow() {
 	return win
 }
 
-const initMenu = async () => {
+const initMenu = async (): Promise<void> => {
 	console.log('Initiating Menu Window')
 	const copiedText = await simulateCopyFn()
 	const menu = await createMenuOverlayWindow()
