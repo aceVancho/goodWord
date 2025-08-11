@@ -6,6 +6,7 @@ html,
 body,
 :root {
 	height: 100%;
+  background: transparent !important;
 }
 
 @layer base {
@@ -73,3 +74,5 @@ body,
 		@apply bg-background text-foreground;
 	}
 }
+
+/* Add above @apply back to get rid of transparent */

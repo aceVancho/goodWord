@@ -19,10 +19,12 @@ async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 	const win = new BrowserWindow({
 		width: 300,
 		height: 400,
+		// width: 1000,
+		// height: 1000,
 		x,
 		y,
-		backgroundMaterial: 'acrylic',
 		show: true,
+		backgroundMaterial: 'acrylic',
 		vibrancy: 'popover',
 		backgroundColor: '#00000000',
 		transparent: true,
@@ -34,7 +36,7 @@ async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 			preload: path.join(__dirname, '../preload/index.js'),
 			contextIsolation: false,
 			nodeIntegration: true
-		}
+		},
 		// frame: false,
 		// transparent: true,
 		// resizable: true,
@@ -42,7 +44,7 @@ async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 		// skipTaskbar: true,
 		// vibrancy: undefined,
 		// visualEffectState: 'inactive', // optional
-		// hasShadow: false,          // 💥 removes the drop shadow
+		// hasShadow: false // 💥 removes the drop shadow
 		// thickFrame: false,
 		// roundedCorners: false,
 	})
@@ -59,11 +61,14 @@ async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 
 	win.once('ready-to-show', () => {
 		win.showInactive() // Doesn’t steal focus
+		console.log('Menu window is ready to show')
+		// win.setIgnoreMouseEvents(true, { forward: true })
 	})
 
 	// Optional: Close on blur
 	win.on('blur', () => {
 		if (!win.webContents.isDevToolsOpened()) {
+		console.log('Menu window is ready to show')
 			win.close()
 		}
 	})
