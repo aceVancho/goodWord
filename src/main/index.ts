@@ -3,6 +3,7 @@ import { app, BrowserWindow, globalShortcut, screen, clipboard, ipcMain } from '
 import { join } from 'path'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { keyboard, Key } from '@nut-tree-fork/nut-js'
+import { searchThesaurus } from './api/agents/agents'
 
 const simulateCopyFn = async () => {
 	// Simulate Cmd+C (on macOS)
@@ -56,7 +57,7 @@ async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 	if (!app.isPackaged) {
 		win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/menu.html`)
 		console.log('Loading menu.html from packaged app')
-		win.webContents.openDevTools({ mode: 'detach' }) // Uncomment for devTools on state
+		// win.webContents.openDevTools({ mode: 'detach' }) // Uncomment for devTools on state
 	} else {
 		// win.loadFile(path.join(__dirname, '../../out/menu.html'))
 		win.loadFile(join(__dirname, '../renderer/index.html'))
@@ -103,18 +104,11 @@ app.whenReady().then(() => {
 		optimizer.watchWindowShortcuts(window)
 	})
 
-	// createWindow()
-
-	// app.on('activate', function () {
-	//   // On macOS it's common to re-create a window in the app when the
-	//   // dock icon is clicked and there are no other windows open.
-	//   if (BrowserWindow.getAllWindows().length === 0) createWindow()
-	// })
-
 	globalShortcut.register('Option+Space', initMenu)
 
   ipcMain.handle('search:thesaurus', async (event, searchTerm) => {
     console.log('search:thesaurus =>', searchTerm)
+    const response = await searchThesaurus(searchTerm);
   })
 })
 
