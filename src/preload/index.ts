@@ -5,7 +5,17 @@ import { electronAPI } from '@electron-toolkit/preload'
 console.log('Preload script loaded successfully')
 
 const api = {
-	onCopyText: (callback: (text: string) => void) => {
+  on: (channel: string, listener: (...args: any[]) => void): void => {
+    ipcRenderer.on(channel, (_, ...args) => {
+      console.log((`Preload.js => on: channel = ${channel} with args: ${args}`))
+      listener(...args)}
+    )
+  },
+  invoke: (channel: string, ...args: any[]): Promise<any> => {
+    console.log(`Preload.js => invoke: channel = ${channel} with args: ${args}`)
+    return ipcRenderer.invoke(channel, ...args)
+  },
+	onCopyText: (callback: (text: string) => void): void => {
 		// callback('Test send of onCopyText outside ipcRenderer.on')
 		ipcRenderer.on('copy-text', (_, text) => {
 			console.log('preload.js: => onCopyText:', text)

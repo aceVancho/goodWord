@@ -1,5 +1,5 @@
 import path from 'path'
-import { app, BrowserWindow, globalShortcut, screen, clipboard } from 'electron'
+import { app, BrowserWindow, globalShortcut, screen, clipboard, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { keyboard, Key } from '@nut-tree-fork/nut-js'
@@ -33,9 +33,12 @@ async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 		skipTaskbar: true,
 		title: 'goodword.ai',
 		webPreferences: {
-			preload: path.join(__dirname, '../preload/index.js'),
-			contextIsolation: false,
-			nodeIntegration: true
+      preload: !app.isPackaged
+      ? path.join(__dirname, '../../out/preload/index.js')
+      : path.join(__dirname, '../preload/index.js'),
+			contextIsolation: true,
+			nodeIntegration: false,
+      sandbox: false,
 		},
 		// frame: false,
 		// transparent: true,
@@ -53,7 +56,7 @@ async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 	if (!app.isPackaged) {
 		win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/menu.html`)
 		console.log('Loading menu.html from packaged app')
-		// win.webContents.openDevTools({ mode: 'detach' }) // Uncomment for devTools on state
+		win.webContents.openDevTools({ mode: 'detach' }) // Uncomment for devTools on state
 	} else {
 		// win.loadFile(path.join(__dirname, '../../out/menu.html'))
 		win.loadFile(join(__dirname, '../renderer/index.html'))
@@ -109,6 +112,10 @@ app.whenReady().then(() => {
 	// })
 
 	globalShortcut.register('Option+Space', initMenu)
+
+  ipcMain.handle('search:thesaurus', async (event, searchTerm) => {
+    console.log('search:thesaurus =>', searchTerm)
+  })
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

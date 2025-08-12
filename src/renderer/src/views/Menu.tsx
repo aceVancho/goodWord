@@ -18,17 +18,18 @@ import {
 	CommandList,
 	CommandSeparator
 } from '../components/ui/command'
-import { ThemeBtn } from '@renderer/components/ui/themeBtn'
+import { ThemeBtn } from '@renderer/components/themeBtn'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useStore } from '@renderer/stores/useStore'
 
 export function Menu(): JSX.Element {
   const navigate = useNavigate()
-	const [copiedText, setCopiedText] = useState<string>('')
+  const { searchTerm, setSearchTerm } = useStore()
 	useEffect(() => {
 		window.api?.onCopyText(text => {
 			console.log('Menu.tsx => onCopyText:', text)
-			setCopiedText(text)
+      setSearchTerm(text);
 		})
 	}, [])
 	const truncateText = (text: string, maxChars: number): string => {
@@ -42,7 +43,7 @@ export function Menu(): JSX.Element {
         <CommandItem className='ml-1'>
           <Search />
           <span className='ml-1 text-sm text-muted-foreground'>
-            {truncateText(copiedText, 30)}
+            {searchTerm && truncateText(searchTerm, 30)}
           </span>
         </CommandItem>
         <CommandList>
@@ -52,7 +53,9 @@ export function Menu(): JSX.Element {
               <BookA />
               <span>Dictionary</span>
             </CommandItem>
-            <div onClick={() => navigate('/thesaurus')}>
+            <div onClick={() => {
+              navigate('/thesaurus')
+            }}>
               <CommandItem>
                 <BookType />
                 <span>Thesaurus</span>

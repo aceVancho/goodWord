@@ -11,21 +11,8 @@ import { Button } from '@renderer/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAnimateCss } from '@renderer/components/useAnimateCss'
-
-export const BackBar = ({ onBack }: { onBack: () => void }): JSX.Element => {
-  return (
-    <div className='w-full bg-background'>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="m-1 size-8"
-        onClick={onBack}
-      >
-        <ChevronLeft />
-      </Button>
-    </div>
-  )
-}
+import { BackBar } from '@renderer/components/BackBar'
+import { useStore } from '@renderer/stores/useStore'
 
 export const Thesaurus = (): JSX.Element => {
   const navigate  = useNavigate()
@@ -34,10 +21,15 @@ export const Thesaurus = (): JSX.Element => {
     outClass: 'animate__fadeOutRight',
     durationMs: 750, // optional
   });
+  const { searchTerm } = useStore();
+  useEffect(() => { // TODO: Put in fetchData
+    window.api.invoke('search:thesaurus', searchTerm)
+  }, [searchTerm])
 
   return (
     <div ref={ref} className={`${className} h-full bg-background`}>
-      <BackBar onBack={() => exit(() => navigate('/'))} />
+      <BackBar onBack={() => navigate('/')} />
+      {/* <BackBar onBack={() => exit(() => navigate('/'))} /> // Uncomment to use exit animation on back */}
 
       <Card className="@container/card border-0 rounded-none shadow-none bg-background">
         <CardHeader>
