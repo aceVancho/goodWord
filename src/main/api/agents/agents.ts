@@ -1,34 +1,32 @@
-// npm install @langchain-anthropic
-import { createReactAgent } from '@langchain/langgraph/prebuilt'
-// import { tool } from '@langchain/core/tools'
 import { ChatOpenAI } from '@langchain/openai'
 import { z } from 'zod'
-import { HumanMessage } from '@langchain/core/messages'
+import { prompts } from '../promps/prompts';
 
-const schema: z.ZodSchema<any> = z.object({
-	synonyms: z.array(z.string())
+const synonymsSchema = z.object({
+	synonyms: z.object({
+		veryCommon: z.array(z.string()).length(10),
+		common: z.array(z.string()).length(10),
+		uncommon: z.array(z.string()).length(10),
+		rare: z.array(z.string()).length(10),
+		archaic: z.array(z.string()).length(10)
+	})
 });
 
-const agentModel = new ChatOpenAI({ temperature: 0, model: "gpt-4o" });
-const agent = createReactAgent({
-  llm: agentModel,
-  tools: [],
-  responseFormat: schema
-});
-
-// const model = new ChatOpenAI({
-// 	temperature: 0,
-// 	model: 'gpt-4o'
-// }).withStructuredOutput(schema)
+const model = new ChatOpenAI({
+	temperature: 0,
+	model: 'gpt-4o',
+  maxTokens: -1,
+}).withStructuredOutput<typeof synonymsSchema._type>(synonymsSchema)
 
 export const searchThesaurus = async (word: string) => {
-
-	const response1 = await agent.invoke({messages: [new HumanMessage(`Give me synonyms for this word: ${word} `)]}, { configurable: { thread_id: "420" } })
-	// const response2 = await model.invoke(
-	// 	[new HumanMessage(`Give me synonyms for this word: ${word} `)],
-	// 	{ configurable: { thread_id: '420' } }
-	// )
-
-	console.log(`\nRESPONSE1: ${JSON.stringify(response1)}\n`)
-	// console.log(`\nRESPONSE2: ${JSON.stringify(response2)}\n`)
+  try {
+    const response = await model.invoke(
+      prompts.thesaurus(word),
+      { configurable: { thread_id: '420' } }
+    )
+    return response;
+  } catch (error) {
+    console.error(`Error occurred while searching thesaurus: ${error}`);
+    throw error;
+  }
 }

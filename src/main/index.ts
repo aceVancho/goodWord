@@ -109,6 +109,7 @@ app.whenReady().then(() => {
   ipcMain.handle('search:thesaurus', async (event, searchTerm) => {
     console.log('search:thesaurus =>', searchTerm)
     const response = await searchThesaurus(searchTerm);
+    
   })
 })
 
