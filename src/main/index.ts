@@ -1,5 +1,12 @@
 import path from 'path'
-import { app, BrowserWindow, globalShortcut, screen, clipboard, ipcMain } from 'electron'
+import {
+	app,
+	BrowserWindow,
+	globalShortcut,
+	screen,
+	clipboard,
+	ipcMain
+} from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { keyboard, Key } from '@nut-tree-fork/nut-js'
@@ -34,13 +41,13 @@ async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 		skipTaskbar: true,
 		title: 'goodword.ai',
 		webPreferences: {
-      preload: !app.isPackaged
-      ? path.join(__dirname, '../../out/preload/index.js')
-      : path.join(__dirname, '../preload/index.js'),
+			preload: !app.isPackaged
+				? path.join(__dirname, '../../out/preload/index.js')
+				: path.join(__dirname, '../preload/index.js'),
 			contextIsolation: true,
 			nodeIntegration: false,
-      sandbox: false,
-		},
+			sandbox: false
+		}
 		// frame: false,
 		// transparent: true,
 		// resizable: true,
@@ -72,7 +79,7 @@ async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 	// Optional: Close on blur
 	win.on('blur', () => {
 		if (!win.webContents.isDevToolsOpened()) {
-		console.log('Menu window is ready to show')
+			console.log('Menu window is ready to show')
 			win.close()
 		}
 	})
@@ -84,6 +91,7 @@ const initMenu = async (): Promise<void> => {
 	console.log('Initiating Menu Window')
 	const copiedText = await simulateCopyFn()
 	const menu = await createMenuOverlayWindow()
+
 	menu.webContents.on('did-finish-load', () => {
 		console.log('index.ts: copiedText => preload:', copiedText)
 		menu.webContents.send('copy-text', copiedText)
@@ -106,11 +114,15 @@ app.whenReady().then(() => {
 
 	globalShortcut.register('Option+Space', initMenu)
 
-  ipcMain.handle('search:thesaurus', async (event, searchTerm) => {
-    console.log('search:thesaurus =>', searchTerm)
-    const response = await searchThesaurus(searchTerm);
-    
-  })
+	ipcMain.handle('search:thesaurus', async (event, searchTerm) => {
+		console.log('main: search:thesaurus =>', searchTerm)
+		try {
+			const response = await searchThesaurus(searchTerm)
+			event.sender.send('data:thesaurus', response)
+		} catch (error) {
+			event.sender.send('error:thesaurus', error)
+		}
+	})
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

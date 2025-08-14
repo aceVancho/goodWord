@@ -1,53 +1,113 @@
 import 'animate.css'
 import { TrendingUp, ChevronLeft } from 'lucide-react'
 import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../components/ui/card"
+	Card,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle
+} from '../components/ui/card'
 import { Button } from '@renderer/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAnimateCss } from '@renderer/components/useAnimateCss'
 import { BackBar } from '@renderer/components/BackBar'
 import { useStore } from '@renderer/stores/useStore'
+import { is } from '@electron-toolkit/utils'
+
+const Spinner = () => (
+	<div className='spinner'>
+		<div className='double-bounce1'></div>
+		<div className='double-bounce2'></div>
+	</div>
+)
 
 export const Thesaurus = (): JSX.Element => {
-  const navigate  = useNavigate()
-  const { ref, className, exit } = useAnimateCss({
-    inClass: 'animate__fadeInRight',
-    outClass: 'animate__fadeOutRight',
-    durationMs: 750, // optional
-  });
-  const { searchTerm } = useStore();
-  useEffect(() => { // TODO: Put in fetchData
-    window.api.invoke('search:thesaurus', searchTerm)
-  }, [searchTerm])
+	const navigate = useNavigate()
+	const {
+		searchTerm,
+		fetchData,
+		isLoading,
+		data,
+		setData,
+		setIsLoading,
+		setError
+	} = useStore()
 
-  return (
-    <div ref={ref} className={`${className} h-full bg-background`}>
-      <BackBar onBack={() => navigate('/')} />
-      {/* <BackBar onBack={() => exit(() => navigate('/'))} /> // Uncomment to use exit animation on back */}
+	const { ref, className, exit } = useAnimateCss({
+		inClass: 'animate__fadeInRight',
+		outClass: 'animate__fadeOutRight',
+		durationMs: 750
+	})
 
-      <Card className="@container/card border-0 rounded-none shadow-none bg-background">
-        <CardHeader>
-          <CardDescription>Total Revenue</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            $1,250.00
-          </CardTitle>
-        </CardHeader>
+	// Search
+	useEffect(() => {
+		if (searchTerm) fetchData(searchTerm, 'thesaurus')
+	}, [searchTerm])
 
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Trending up this month <TrendingUp className="size-4" />
-          </div>
-          <div className="text-muted-foreground">
-            Visitors for the last 6 months
-          </div>
-        </CardFooter>
-      </Card>
-    </div>
-  )
+	// Update Result
+	useEffect(() => {
+		const handleError = error => {
+			console.error('Thesaurus error:', error)
+			setIsLoading(false)
+			setError(error)
+		}
+
+		const handleData = data => {
+			console.log('Received thesaurus data:', data)
+			setIsLoading(false)
+			setData(data)
+		}
+
+		window.api.on('error:thesaurus', handleError)
+		window.api.on('data:thesaurus', handleData)
+
+		return () => {
+			window.api.off('error:thesaurus', handleError)
+			window.api.off('data:thesaurus', handleData)
+		}
+	}, [setData, setError, setIsLoading])
+
+	if (isLoading) return <Spinner />
+
+	const TIERS = ['veryCommon', 'common', 'uncommon', 'rare', 'archaic']
+
+  if (!isLoading && data) return (
+		<div
+			ref={ref}
+			className={`${className} h-full bg-background`}
+		>
+			<BackBar onBack={() => navigate('/')} />
+			{/* <BackBar onBack={() => exit(() => navigate('/'))} /> // Uncomment to use exit animation on back */}
+
+			<Card className='@container/card rounded-none border-0 bg-background shadow-none'>
+				<CardHeader>
+					<CardDescription>Synonyms</CardDescription>
+					<CardTitle className='@[250px]/card:text-3xl text-2xl font-semibold tabular-nums'>
+						{searchTerm}
+					</CardTitle>
+				</CardHeader>
+
+				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
+					{TIERS.map((tier, idx) => (
+						<div key={idx}>
+							<div
+								className='line-clamp-1 flex gap-2 font-medium'
+							>
+								{tier}
+							</div>
+
+							<div className='text-muted-foreground'>
+								{data.synonyms[tier].map((synonym, idx) => (
+									<span key={idx}>{synonym}, </span>
+								))}
+							</div>
+						</div>
+					))}
+				</CardFooter>
+			</Card>
+		</div>
+	)
+
+  return <></>
 }

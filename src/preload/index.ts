@@ -11,6 +11,10 @@ const api = {
       listener(...args)}
     )
   },
+    off: (channel: string, listener: (...args: any[]) => void): void => {
+    // Removes the exact listener reference previously registered
+    ipcRenderer.removeListener(channel, listener)
+  },
   invoke: (channel: string, ...args: any[]): Promise<any> => {
     console.log(`Preload.js => invoke: channel = ${channel} with args: ${args}`)
     return ipcRenderer.invoke(channel, ...args)

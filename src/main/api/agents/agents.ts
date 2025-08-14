@@ -19,14 +19,8 @@ const model = new ChatOpenAI({
 }).withStructuredOutput<typeof synonymsSchema._type>(synonymsSchema)
 
 export const searchThesaurus = async (word: string) => {
-  try {
-    const response = await model.invoke(
+  return await model.invoke(
       prompts.thesaurus(word),
       { configurable: { thread_id: '420' } }
     )
-    return response;
-  } catch (error) {
-    console.error(`Error occurred while searching thesaurus: ${error}`);
-    throw error;
-  }
 }
