@@ -7,6 +7,7 @@ body,
 :root {
 	height: 100%;
   background: transparent !important;
+  overflow-x: hidden;
 }
 
 @layer base {
@@ -77,6 +78,34 @@ body,
 
 /* Add above @apply back to get rid of transparent */
 
+@layer utilities {
+  /* Works for browsers that support scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px; /* scrollbar width */
+    height: 8px; /* horizontal scrollbar height */
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: hsl(var(--muted)); /* shadcn muted background */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--primary)); /* shadcn primary color */
+    border-radius: 9999px; /* fully rounded */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--primary-foreground) / 0.8); /* slightly darker on hover */
+  }
+
+  /* Firefox-specific */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary)) hsl(var(--muted));
+  }
+}
+
+
 .spinner {
   width: 40px;
   height: 40px;
@@ -89,7 +118,7 @@ body,
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-color: #333;
+  background-color: hsl(var(--primary));
   opacity: 0.6;
   position: absolute;
   top: 0;

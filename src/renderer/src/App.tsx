@@ -13,7 +13,7 @@ import 'animate.css'
 
 const App: FC = () => {
 	return (
-		<div className='h-screen w-full overflow-hidden bg-background '>
+		<div className='h-screen w-full bg-background '>
 			<ThemeProvider
 				defaultTheme='dark'
 				storageKey='vite-ui-theme'

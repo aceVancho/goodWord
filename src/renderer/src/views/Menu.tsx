@@ -18,7 +18,7 @@ import {
 	CommandList,
 	CommandSeparator
 } from '../components/ui/command'
-import { ThemeBtn } from '@renderer/components/themeBtn'
+import { ThemeBtn } from '../components/ThemeBtn'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useStore } from '@renderer/stores/useStore'

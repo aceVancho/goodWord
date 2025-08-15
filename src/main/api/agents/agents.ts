@@ -3,13 +3,11 @@ import { z } from 'zod'
 import { prompts } from '../promps/prompts';
 
 const synonymsSchema = z.object({
-	synonyms: z.object({
 		veryCommon: z.array(z.string()).length(10),
 		common: z.array(z.string()).length(10),
 		uncommon: z.array(z.string()).length(10),
 		rare: z.array(z.string()).length(10),
 		archaic: z.array(z.string()).length(10)
-	})
 });
 
 const model = new ChatOpenAI({

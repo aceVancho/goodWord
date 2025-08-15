@@ -36,7 +36,7 @@ async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 		vibrancy: 'popover',
 		backgroundColor: '#00000000',
 		transparent: true,
-		resizable: false,
+		resizable: true,
 		frame: false,
 		skipTaskbar: true,
 		title: 'goodword.ai',
@@ -47,10 +47,9 @@ async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 			contextIsolation: true,
 			nodeIntegration: false,
 			sandbox: false
-		}
+		},
 		// frame: false,
 		// transparent: true,
-		// resizable: true,
 		// alwaysOnTop: true,
 		// skipTaskbar: true,
 		// vibrancy: undefined,

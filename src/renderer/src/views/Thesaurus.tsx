@@ -13,14 +13,7 @@ import { useEffect, useState } from 'react'
 import { useAnimateCss } from '@renderer/components/useAnimateCss'
 import { BackBar } from '@renderer/components/BackBar'
 import { useStore } from '@renderer/stores/useStore'
-import { is } from '@electron-toolkit/utils'
-
-const Spinner = () => (
-	<div className='spinner'>
-		<div className='double-bounce1'></div>
-		<div className='double-bounce2'></div>
-	</div>
-)
+import { Spinner } from '@renderer/components/Spinner'
 
 export const Thesaurus = (): JSX.Element => {
 	const navigate = useNavigate()
@@ -68,7 +61,9 @@ export const Thesaurus = (): JSX.Element => {
 		}
 	}, [setData, setError, setIsLoading])
 
-	if (isLoading) return <Spinner />
+	if (isLoading) return (
+      <Spinner />
+  )
 
 	const TIERS = ['veryCommon', 'common', 'uncommon', 'rare', 'archaic']
 
@@ -81,7 +76,7 @@ export const Thesaurus = (): JSX.Element => {
 			{/* <BackBar onBack={() => exit(() => navigate('/'))} /> // Uncomment to use exit animation on back */}
 
 			<Card className='@container/card rounded-none border-0 bg-background shadow-none'>
-				<CardHeader>
+				<CardHeader className='py-3 px-6'>
 					<CardDescription>Synonyms</CardDescription>
 					<CardTitle className='@[250px]/card:text-3xl text-2xl font-semibold tabular-nums'>
 						{searchTerm}
@@ -89,21 +84,32 @@ export const Thesaurus = (): JSX.Element => {
 				</CardHeader>
 
 				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
-					{TIERS.map((tier, idx) => (
+					{TIERS.map((tier, idx) => {
+            let name = tier
+            if (tier === 'veryCommon') {
+              name = 'very common'
+            }
+            return (
 						<div key={idx}>
 							<div
-								className='line-clamp-1 flex gap-2 font-medium'
+								className='line-clamp-1 pt-1 flex gap-2 font-medium'
 							>
-								{tier}
+								{name}
 							</div>
 
 							<div className='text-muted-foreground'>
-								{data.synonyms[tier].map((synonym, idx) => (
-									<span key={idx}>{synonym}, </span>
+								{data[tier].map((synonym, idx) => (
+                  <span key={idx}>
+                    <span className="cursor-pointer active:font-semibold text-md hover:underline underline-offset-4">
+                      {synonym}
+                    </span>
+                    {idx < data[tier].length - 1 && ', '}
+                  </span>
 								))}
 							</div>
 						</div>
-					))}
+            )
+          })}
 				</CardFooter>
 			</Card>
 		</div>
