@@ -6,7 +6,8 @@ import {
 	KeyboardMusic,
 	NotepadText,
 	LucideUnlockKeyhole,
-	Search
+	Search,
+  Loader
 } from 'lucide-react'
 
 import {
@@ -87,6 +88,15 @@ export function Menu(): JSX.Element {
               {/* <CommandShortcut>⌘S</CommandShortcut> */}
             </CommandItem>
             <ThemeBtn />
+            <div onClick={() => {
+              navigate('/loading')
+            }}>
+              <CommandItem disabled>
+                <Loader />
+                <span>Loading Test</span>
+                {/* <CommandShortcut>⌘S</CommandShortcut> */}
+              </CommandItem>
+            </div>
           </CommandGroup>
         </CommandList>
       </Command>

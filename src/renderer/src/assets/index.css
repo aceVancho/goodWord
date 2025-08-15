@@ -90,7 +90,7 @@ body,
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--primary)); /* shadcn primary color */
+    background-color: hsl(var(--primary-foreground)); /* shadcn primary color */
     border-radius: 9999px; /* fully rounded */
   }
 
@@ -101,7 +101,7 @@ body,
   /* Firefox-specific */
   * {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--primary)) hsl(var(--muted));
+    scrollbar-color: hsl(var(--muted-foreground)) hsl(var(--muted));
   }
 }
 

@@ -14,6 +14,7 @@ import { useAnimateCss } from '@renderer/components/useAnimateCss'
 import { BackBar } from '@renderer/components/BackBar'
 import { useStore } from '@renderer/stores/useStore'
 import { Spinner } from '@renderer/components/Spinner'
+import { Skeletons } from '@renderer/components/Skeletons'
 
 export const Thesaurus = (): JSX.Element => {
 	const navigate = useNavigate()
@@ -76,9 +77,9 @@ export const Thesaurus = (): JSX.Element => {
 			{/* <BackBar onBack={() => exit(() => navigate('/'))} /> // Uncomment to use exit animation on back */}
 
 			<Card className='@container/card rounded-none border-0 bg-background shadow-none'>
-				<CardHeader className='py-3 px-6'>
+				<CardHeader className='py-1 px-6'>
 					<CardDescription>Synonyms</CardDescription>
-					<CardTitle className='@[250px]/card:text-3xl text-2xl font-semibold tabular-nums'>
+					<CardTitle className='text-2xl font-semibold'>
 						{searchTerm}
 					</CardTitle>
 				</CardHeader>
