@@ -1,0 +1,148 @@
+import 'animate.css'
+import {
+	TrendingUp,
+	ChevronLeft,
+	Briefcase,
+	BriefcaseIcon,
+	HeartHandshake,
+	LucideHeartHandshake,
+	Target,
+	HandMetal,
+	HandFist,
+	HeartPlus,
+	HeartOff,
+} from 'lucide-react'
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle
+} from '../components/ui/card'
+import { Button } from '@renderer/components/ui/button'
+import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useAnimateCss } from '@renderer/components/useAnimateCss'
+import { BackBar } from '@renderer/components/BackBar'
+import { useStore } from '@renderer/stores/useStore'
+import { Spinner } from '@renderer/components/Spinner'
+import { Skeletons } from '@renderer/components/Skeletons'
+
+export const Tone = (): JSX.Element => {
+	const navigate = useNavigate()
+	const {
+		searchTerm,
+		fetchData,
+		isLoading,
+		data,
+		setData,
+		setIsLoading,
+		setError
+	} = useStore()
+
+	const { ref, className, exit } = useAnimateCss({
+		inClass: 'animate__fadeInRight',
+		outClass: 'animate__fadeOutRight',
+		durationMs: 750
+	})
+
+	// Search
+	useEffect(() => {
+		if (searchTerm) fetchData(searchTerm, 'thesaurus')
+	}, [searchTerm])
+
+	// Update Result
+	useEffect(() => {
+		const handleError = error => {
+			console.error('Thesaurus error:', error)
+			setIsLoading(false)
+			setError(error)
+		}
+
+		const handleData = data => {
+			console.log('Received thesaurus data:', data)
+			setIsLoading(false)
+			setData(data)
+		}
+
+		window.api.on('error:thesaurus', handleError)
+		window.api.on('data:thesaurus', handleData)
+
+		return () => {
+			window.api.off('error:thesaurus', handleError)
+			window.api.off('data:thesaurus', handleData)
+		}
+	}, [setData, setError, setIsLoading])
+
+	return (
+		<div
+			ref={ref}
+			className={`${className} h-full bg-background`}
+		>
+			<BackBar onBack={() => navigate('/')} />
+			{/* <BackBar onBack={() => exit(() => navigate('/'))} /> // Uncomment to use exit animation on back */}
+
+			<Card className='@container/card rounded-none border-0 bg-background shadow-none'>
+				<CardHeader className='px-6 py-1'>
+					<CardDescription>Tone & Phraseology</CardDescription>
+					<CardTitle className='text-2xl font-semibold'>Common Tones</CardTitle>
+				</CardHeader>
+				<CardContent className='px-2 flex flex-col gap-3 mt-3 cursor-default'>
+					<div className='flex items-center gap-2 rounded-sm bg-background px-4 text-sm font-normal outline-none hover:bg-muted'>
+						<BriefcaseIcon className='text-sm' size="16" />
+						<span>Polished / Professional</span>
+					</div>
+					<div className='flex items-center gap-2 rounded-sm bg-background px-4 text-sm font-normal outline-none hover:bg-muted'>
+						<HeartHandshake className='text-sm' size="16" />
+						<span>Friendly / Approachable</span>
+					</div>
+					<div className='flex items-center gap-2 rounded-sm bg-background px-4 text-sm font-normal outline-none hover:bg-muted'>
+						<Target className='text-sm' size="16" />
+						<span>Concise / Clear</span>
+					</div>
+					<div className='flex items-center gap-2 rounded-sm bg-background px-4 text-sm font-normal outline-none hover:bg-muted'>
+						<HandFist className='text-sm' size="16" />
+						<span>Persuasive / Impactful</span>
+					</div>
+					<div className='flex items-center gap-2 rounded-sm bg-background px-4 text-sm font-normal outline-none hover:bg-muted'>
+						<HeartPlus className='text-sm' size="16" />
+						<span>Empathetic / Supportive</span>
+					</div>
+					<div className='flex items-center gap-2 rounded-sm bg-background px-4 text-sm font-normal outline-none hover:bg-muted'>
+						<HeartOff className='text-sm' size="16" />
+						<span>Neutral / Non-Emotive</span>
+					</div>
+				</CardContent>
+				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
+					{/* {TIERS.map((tier, idx) => {
+            let name = tier
+            if (tier === 'veryCommon') {
+              name = 'very common'
+            }
+            return (
+						<div key={idx}>
+							<div
+								className='line-clamp-1 pt-1 flex gap-2 font-medium'
+							>
+								{name}
+							</div>
+
+							<div className='text-muted-foreground'>
+								{data[tier].map((synonym, idx) => (
+                  <span key={idx}>
+                    <span className="cursor-pointer active:font-semibold text-md hover:underline underline-offset-4">
+                      {synonym}
+                    </span>
+                    {idx < data[tier].length - 1 && ', '}
+                  </span>
+								))}
+							</div>
+						</div>
+            )
+          })} */}
+				</CardFooter>
+			</Card>
+		</div>
+	)
+}

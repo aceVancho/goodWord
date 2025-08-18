@@ -69,11 +69,13 @@ export function Menu(): JSX.Element {
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading='Writing'>
-            <CommandItem>
-              <MessageSquareMore />
-              <span>Phraseology & Tone</span>
-              {/* <CommandShortcut>⌘P</CommandShortcut> */}
-            </CommandItem>
+            <div onClick={(() => navigate('/tone'))}>
+              <CommandItem>
+                <MessageSquareMore />
+                <span>Phraseology & Tone</span>
+                {/* <CommandShortcut>⌘P</CommandShortcut> */}
+              </CommandItem>
+            </div>
             <CommandItem>
               <LucideUnlockKeyhole />
               <span>Translate Meaning</span>
