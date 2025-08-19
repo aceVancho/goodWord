@@ -39,14 +39,6 @@ export function Menu(): JSX.Element {
 	}
 	return (
       <Command className='rounded-lg border shadow-md'>
-        {/* <Command className="rounded-lg border shadow-md md:min-w-[450px]"> */}
-        {/* <CommandInput placeholder={`${copiedText}`} /> */}
-        <CommandItem className='ml-1'>
-          <Search />
-          <span className='ml-1 text-sm text-muted-foreground'>
-            {searchTerm && truncateText(searchTerm, 30)}
-          </span>
-        </CommandItem>
         <CommandList>
           {/* <CommandEmpty>No results found.</CommandEmpty> */}
           <CommandGroup heading='Language'>

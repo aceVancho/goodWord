@@ -11,6 +11,17 @@ import {
 	HandFist,
 	HeartPlus,
 	HeartOff,
+	Settings,
+	MessageSquareMore,
+	BookA,
+	BookType,
+	KeyboardMusic,
+	NotepadText,
+	LucideUnlockKeyhole,
+	Search,
+	Loader,
+  Handshake,
+  PlusIcon
 } from 'lucide-react'
 import {
 	Card,
@@ -20,6 +31,15 @@ import {
 	CardHeader,
 	CardTitle
 } from '../components/ui/card'
+import {
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+	CommandSeparator
+} from '../components/ui/command'
 import { Button } from '@renderer/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -28,6 +48,7 @@ import { BackBar } from '@renderer/components/BackBar'
 import { useStore } from '@renderer/stores/useStore'
 import { Spinner } from '@renderer/components/Spinner'
 import { Skeletons } from '@renderer/components/Skeletons'
+import { ThemeBtn } from '@renderer/components/ThemeBtn'
 
 export const Tone = (): JSX.Element => {
 	const navigate = useNavigate()
@@ -78,71 +99,88 @@ export const Tone = (): JSX.Element => {
 	return (
 		<div
 			ref={ref}
-			className={`${className} h-full bg-background`}
+			className={`h-full bg-background flex flex-col`}
+			// className={`${className} h-full bg-background flex flex-col`}
 		>
 			<BackBar onBack={() => navigate('/')} />
-			{/* <BackBar onBack={() => exit(() => navigate('/'))} /> // Uncomment to use exit animation on back */}
-
-			<Card className='@container/card rounded-none border-0 bg-background shadow-none'>
-				<CardHeader className='px-6 py-1'>
-					<CardDescription>Tone & Phraseology</CardDescription>
-					<CardTitle className='text-2xl font-semibold'>Common Tones</CardTitle>
-				</CardHeader>
-				<CardContent className='px-2 flex flex-col gap-3 mt-3 cursor-default'>
-					<div className='flex items-center gap-2 rounded-sm bg-background px-4 text-sm font-normal outline-none hover:bg-muted'>
-						<BriefcaseIcon className='text-sm' size="16" />
-						<span>Polished / Professional</span>
-					</div>
-					<div className='flex items-center gap-2 rounded-sm bg-background px-4 text-sm font-normal outline-none hover:bg-muted'>
-						<HeartHandshake className='text-sm' size="16" />
-						<span>Friendly / Approachable</span>
-					</div>
-					<div className='flex items-center gap-2 rounded-sm bg-background px-4 text-sm font-normal outline-none hover:bg-muted'>
-						<Target className='text-sm' size="16" />
-						<span>Concise / Clear</span>
-					</div>
-					<div className='flex items-center gap-2 rounded-sm bg-background px-4 text-sm font-normal outline-none hover:bg-muted'>
-						<HandFist className='text-sm' size="16" />
+			<Command className='p-1'>
+				<CommandList>
+					<CommandGroup heading='Common Tones'>
+						<CommandItem>
+							<BriefcaseIcon />
+							<span>Professional / Polished</span>
+						</CommandItem>
+							<CommandItem>
+								<Handshake />
+								<span>Friendly / Approachable</span>
+							</CommandItem>
+						<CommandItem>
+							<Target />
+							<span>Clear / Concise</span>
+						</CommandItem>
+					</CommandGroup>
+					<CommandItem>
+						<HandFist />
 						<span>Persuasive / Impactful</span>
-					</div>
-					<div className='flex items-center gap-2 rounded-sm bg-background px-4 text-sm font-normal outline-none hover:bg-muted'>
-						<HeartPlus className='text-sm' size="16" />
+						{/* <CommandShortcut>⌘P</CommandShortcut> */}
+					</CommandItem>
+					<CommandItem>
+						<HeartPlus />
 						<span>Empathetic / Supportive</span>
-					</div>
-					<div className='flex items-center gap-2 rounded-sm bg-background px-4 text-sm font-normal outline-none hover:bg-muted'>
-						<HeartOff className='text-sm' size="16" />
+						{/* <CommandShortcut>⌘B</CommandShortcut> */}
+					</CommandItem>
+					<CommandItem>
+						<HeartOff />
 						<span>Neutral / Non-Emotive</span>
-					</div>
-				</CardContent>
-				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
-					{/* {TIERS.map((tier, idx) => {
-            let name = tier
-            if (tier === 'veryCommon') {
-              name = 'very common'
-            }
-            return (
-						<div key={idx}>
-							<div
-								className='line-clamp-1 pt-1 flex gap-2 font-medium'
-							>
-								{name}
-							</div>
+						{/* <CommandShortcut>⌘B</CommandShortcut> */}
+					</CommandItem>
+					<CommandSeparator />
+					<CommandGroup heading='Custom Tones'>
+						<CommandItem>
+							<PlusIcon />
+							<span>Create Tone</span>
+							{/* <CommandShortcut>⌘S</CommandShortcut> */}
+						</CommandItem>
+					</CommandGroup>
+				</CommandList>
+			</Command>
 
-							<div className='text-muted-foreground'>
-								{data[tier].map((synonym, idx) => (
-                  <span key={idx}>
-                    <span className="cursor-pointer active:font-semibold text-md hover:underline underline-offset-4">
-                      {synonym}
-                    </span>
-                    {idx < data[tier].length - 1 && ', '}
-                  </span>
-								))}
-							</div>
-						</div>
-            )
-          })} */}
-				</CardFooter>
-			</Card>
 		</div>
 	)
 }
+
+  // Card Version:
+{/* <Card className='@container/card rounded-none border-0 bg-background shadow-none'>
+  <CardHeader className='px-6 py-1'>
+    <CardDescription>Tone & Phraseology</CardDescription>
+    <CardTitle className='text-2xl font-semibold'>Common Tones</CardTitle>
+  </CardHeader>
+  <CardContent className='px-2 flex flex-col gap-2 mt-3 cursor-default'>
+    <div className='flex items-center gap-2 rounded-sm bg-background px-4 py-1 text-sm font-normal outline-none hover:bg-muted'>
+      <BriefcaseIcon className='text-sm' size="16" />
+      <span>Polished / Professional</span>
+    </div>
+    <div className='flex items-center gap-2 rounded-sm bg-background px-4  text-sm font-normal outline-none hover:bg-muted'>
+      <HeartHandshake className='text-sm' size="16" />
+      <span>Friendly / Approachable</span>
+    </div>
+    <div className='flex items-center gap-2 rounded-sm bg-background px-4  text-sm font-normal outline-none hover:bg-muted'>
+      <Target className='text-sm' size="16" />
+      <span>Concise / Clear</span>
+    </div>
+    <div className='flex items-center gap-2 rounded-sm bg-background px-4  text-sm font-normal outline-none hover:bg-muted'>
+      <HandFist className='text-sm' size="16" />
+      <span>Persuasive / Impactful</span>
+    </div>
+    <div className='flex items-center gap-2 rounded-sm bg-background px-4  text-sm font-normal outline-none hover:bg-muted'>
+      <HeartPlus className='text-sm' size="16" />
+      <span>Empathetic / Supportive</span>
+    </div>
+    <div className='flex items-center gap-2 rounded-sm bg-background px-4  text-sm font-normal outline-none hover:bg-muted'>
+      <HeartOff className='text-sm' size="16" />
+      <span>Neutral / Non-Emotive</span>
+    </div>
+  </CardContent>
+  <CardFooter className='flex-col items-start gap-1.5 text-sm'>
+  </CardFooter>
+</Card> */}

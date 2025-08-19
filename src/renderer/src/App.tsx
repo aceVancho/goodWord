@@ -46,3 +46,6 @@ const App: FC = () => {
 }
 
 export default App
+
+// /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister \                                                                ─╯
+//   -u "/Users/aevancho/Code/personal/goodword/node_modules/electron/dist/Electron.app"
