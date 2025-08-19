@@ -31,12 +31,48 @@ export const useStore = create<State>((set) => ({
   fetchData: async (searchTerm: string, searchType: string): Promise<void> => {
     set({ isLoading: true, error: null, searchTerm, searchType })
 
-    switch (searchType) {
-      case 'thesaurus':
-        window.api.invoke('search:thesaurus', searchTerm);
+    const [type, subType] = searchType.split(':')
+
+    switch (type) {
+      case 'search':
+        switch (subType) {
+          case 'thesaurus':
+            window.api.invoke('search:thesaurus', searchTerm);
+            break;
+          case 'dictionary':
+            window.api.invoke('search:dictionary', searchTerm);
+            break;
+          case 'rhyme':
+            window.api.invoke('search:rhyme', searchTerm);
+            break;
+          default:
+            set({ isLoading: false, error: 'Unknown search subtype' });
+        }
         break;
-      default:
-        set({ isLoading: false, error: 'Unknown search type' });
-    }
+      case 'tone':
+        switch (subType) {
+          case 'professional':
+            window.api.invoke('tone:professional', searchTerm);
+            break;
+          case 'casual':
+            window.api.invoke('tone:friendly', searchTerm);
+            break;
+          case 'clear':
+            window.api.invoke('tone:clear', searchTerm);
+            break;
+          case 'persuasive':
+            window.api.invoke('tone:persuasive', searchTerm);
+            break;
+          case 'empathetic':
+            window.api.invoke('tone:empathetic', searchTerm);
+            break;
+          case 'neutral':
+            window.api.invoke('tone:neutral', searchTerm);
+            break;
+          default:
+            set({ isLoading: false, error: 'Unknown search subtype' });
+        }
+        break;
+      }
   }
 }))

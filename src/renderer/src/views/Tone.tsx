@@ -96,6 +96,30 @@ export const Tone = (): JSX.Element => {
 		}
 	}, [setData, setError, setIsLoading])
 
+  const commonTones = [{
+    icon: <BriefcaseIcon />,
+    label: 'Professional / Polished'
+  }, {
+    icon: <Handshake />,
+    label: 'Friendly / Approachable'
+  }, {
+    icon: <Target />,
+    label: 'Clear / Concise'
+  },
+  {
+    icon: <HandFist />,
+    label: 'Persuasive / Impactful'
+  },
+  {
+    icon: <HeartPlus />,
+    label: 'Empathetic / Supportive'
+  },
+  {
+    icon: <HeartOff />,
+    label: 'Neutral / Non-Emotive'
+  }
+]
+
 	return (
 		<div
 			ref={ref}
@@ -106,34 +130,19 @@ export const Tone = (): JSX.Element => {
 			<Command className='p-1'>
 				<CommandList>
 					<CommandGroup heading='Common Tones'>
-						<CommandItem>
-							<BriefcaseIcon />
-							<span>Professional / Polished</span>
-						</CommandItem>
-							<CommandItem>
-								<Handshake />
-								<span>Friendly / Approachable</span>
-							</CommandItem>
-						<CommandItem>
-							<Target />
-							<span>Clear / Concise</span>
-						</CommandItem>
+            {commonTones.map((tone, index) => (
+              <div key={index} onClick={() => {
+                if (!searchTerm) return
+                const searchType = `tone:${tone.label.split('/')[0]}`
+                fetchData(searchTerm, searchType)
+              }}>
+                <CommandItem>
+                  {tone.icon}
+                  <span>{tone.label}</span>
+                </CommandItem>
+              </div>
+            ))}
 					</CommandGroup>
-					<CommandItem>
-						<HandFist />
-						<span>Persuasive / Impactful</span>
-						{/* <CommandShortcut>⌘P</CommandShortcut> */}
-					</CommandItem>
-					<CommandItem>
-						<HeartPlus />
-						<span>Empathetic / Supportive</span>
-						{/* <CommandShortcut>⌘B</CommandShortcut> */}
-					</CommandItem>
-					<CommandItem>
-						<HeartOff />
-						<span>Neutral / Non-Emotive</span>
-						{/* <CommandShortcut>⌘B</CommandShortcut> */}
-					</CommandItem>
 					<CommandSeparator />
 					<CommandGroup heading='Custom Tones'>
 						<CommandItem>

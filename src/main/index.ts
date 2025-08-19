@@ -97,6 +97,20 @@ const initMenu = async (): Promise<void> => {
 	})
 }
 
+
+// TODO: Wire up
+const registerIPCHandlers = (map: Record<string, (...a:any[]) => any>) => {
+  for (const [channel, fn] of Object.entries(map)) {
+    ipcMain.handle(channel, (_e, ...args) => fn(...args));
+  }
+}
+
+// TODO: Send event object to searchTerm fn
+registerIPCHandlers({
+  'search:thesaurus': (term: string) => searchThesaurus(term),
+});
+
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

@@ -36,7 +36,7 @@ export const Thesaurus = (): JSX.Element => {
 
 	// Search
 	useEffect(() => {
-		if (searchTerm) fetchData(searchTerm, 'thesaurus')
+		if (searchTerm) fetchData(searchTerm, 'search:thesaurus')
 	}, [searchTerm])
 
 	// Update Result
