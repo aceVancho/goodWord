@@ -26,21 +26,17 @@ import { useStore } from '@renderer/stores/useStore'
 
 export function Menu(): JSX.Element {
   const navigate = useNavigate()
-  const { searchTerm, setSearchTerm } = useStore()
+  const { setSearchTerm } = useStore()
 	useEffect(() => {
 		window.api?.onCopyText(text => {
 			console.log('Menu.tsx => onCopyText:', text)
       setSearchTerm(text);
 		})
 	}, [])
-	const truncateText = (text: string, maxChars: number): string => {
-		if (text.length <= maxChars) return text
-		return text.slice(0, maxChars) + '…'
-	}
+
 	return (
       <Command className='rounded-lg border shadow-md'>
         <CommandList>
-          {/* <CommandEmpty>No results found.</CommandEmpty> */}
           <CommandGroup heading='Language'>
             <CommandItem>
               <BookA />

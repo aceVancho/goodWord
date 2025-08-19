@@ -21,11 +21,9 @@ export const Thesaurus = (): JSX.Element => {
 	const {
 		searchTerm,
 		fetchData,
-		isLoading,
-		data,
-		setData,
-		setIsLoading,
-		setError
+    data,
+    error,
+    isLoading
 	} = useStore()
 
 	const { ref, className, exit } = useAnimateCss({
@@ -36,34 +34,15 @@ export const Thesaurus = (): JSX.Element => {
 
 	// Search
 	useEffect(() => {
-		if (searchTerm) fetchData(searchTerm, 'search:thesaurus')
+    if (searchTerm) fetchData(searchTerm, 'search:thesaurus')
 	}, [searchTerm])
-
-	// Update Result
-	useEffect(() => {
-		const handleError = error => {
-			console.error('Thesaurus error:', error)
-			setIsLoading(false)
-			setError(error)
-		}
-
-		const handleData = data => {
-			console.log('Received thesaurus data:', data)
-			setIsLoading(false)
-			setData(data)
-		}
-
-		window.api.on('error:thesaurus', handleError)
-		window.api.on('data:thesaurus', handleData)
-
-		return () => {
-			window.api.off('error:thesaurus', handleError)
-			window.api.off('data:thesaurus', handleData)
-		}
-	}, [setData, setError, setIsLoading])
 
 	if (isLoading) return (
       <Spinner />
+  )
+
+  if (!isLoading && error) return (
+    <div className="text-red-500">{error}</div>
   )
 
 	const TIERS = ['veryCommon', 'common', 'uncommon', 'rare', 'archaic']

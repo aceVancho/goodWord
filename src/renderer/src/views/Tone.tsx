@@ -55,11 +55,6 @@ export const Tone = (): JSX.Element => {
 	const {
 		searchTerm,
 		fetchData,
-		isLoading,
-		data,
-		setData,
-		setIsLoading,
-		setError
 	} = useStore()
 
 	const { ref, className, exit } = useAnimateCss({
@@ -67,34 +62,6 @@ export const Tone = (): JSX.Element => {
 		outClass: 'animate__fadeOutRight',
 		durationMs: 750
 	})
-
-	// Search
-	useEffect(() => {
-		if (searchTerm) fetchData(searchTerm, 'thesaurus')
-	}, [searchTerm])
-
-	// Update Result
-	useEffect(() => {
-		const handleError = error => {
-			console.error('Thesaurus error:', error)
-			setIsLoading(false)
-			setError(error)
-		}
-
-		const handleData = data => {
-			console.log('Received thesaurus data:', data)
-			setIsLoading(false)
-			setData(data)
-		}
-
-		window.api.on('error:thesaurus', handleError)
-		window.api.on('data:thesaurus', handleData)
-
-		return () => {
-			window.api.off('error:thesaurus', handleError)
-			window.api.off('data:thesaurus', handleData)
-		}
-	}, [setData, setError, setIsLoading])
 
   const commonTones = [{
     icon: <BriefcaseIcon />,

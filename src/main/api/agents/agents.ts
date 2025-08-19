@@ -16,9 +16,4 @@ const model = new ChatOpenAI({
   maxTokens: -1,
 }).withStructuredOutput<typeof synonymsSchema._type>(synonymsSchema)
 
-export const searchThesaurus = async (word: string) => {
-  return await model.invoke(
-      prompts.thesaurus(word),
-      { configurable: { thread_id: '420' } }
-    )
-}
+export const searchThesaurus = async (term: string) => (await model.invoke(prompts.thesaurus(term), { configurable: { thread_id: '420' } }))
