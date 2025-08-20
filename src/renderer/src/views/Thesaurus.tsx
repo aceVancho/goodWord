@@ -75,7 +75,7 @@ export const Thesaurus = (): JSX.Element => {
 								{name}
 							</div>
 
-							<div className='text-muted-foreground'>
+							<div className='flex flex-wrap gap-x-1 text-muted-foreground'>
 								{data[tier].map((synonym, idx) => (
                   <span key={idx}>
                     <span className="cursor-pointer active:font-semibold text-md hover:underline underline-offset-4">
