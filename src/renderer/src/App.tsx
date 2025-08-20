@@ -11,7 +11,7 @@ import { Menu } from './views/Menu'
 import { Thesaurus } from './views/Thesaurus'
 import 'animate.css'
 import { Skeletons } from './components/Skeletons'
-import { Tone } from './views/Tone'
+import { ToneMenu } from './views/ToneMenu'
 
 const App: FC = () => {
 	return (
@@ -31,8 +31,8 @@ const App: FC = () => {
 							element={<Thesaurus />}
 						/>
 						<Route
-							path='/tone'
-							element={<Tone />}
+							path='/tone-menu'
+							element={<ToneMenu />}
 						/>
 						<Route
 							path='/loading'

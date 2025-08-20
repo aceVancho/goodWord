@@ -57,7 +57,7 @@ export function Menu(): JSX.Element {
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading='Writing'>
-            <div onClick={(() => navigate('/tone'))}>
+            <div onClick={(() => navigate('/tone-menu'))}>
               <CommandItem>
                 <MessageSquareMore />
                 <span>Phraseology & Tone</span>
