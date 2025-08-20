@@ -10,7 +10,7 @@ import {
 import { join } from 'path'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { keyboard, Key } from '@nut-tree-fork/nut-js'
-import { searchThesaurus } from './api/agents/agents'
+import { searchThesaurus, toneProfessional } from './api/agents/agents'
 
 const simulateCopyFn = async () => {
 	// Simulate Cmd+C (on macOS)
@@ -54,7 +54,7 @@ async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 	if (!app.isPackaged) {
 		win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/menu.html`)
 		console.log('Loading menu.html from packaged app')
-		// win.webContents.openDevTools({ mode: 'detach' }) // Uncomment for devTools on state
+		win.webContents.openDevTools({ mode: 'detach' }) // Uncomment for devTools on state
 	} else {
 		// win.loadFile(path.join(__dirname, '../../out/menu.html'))
 		win.loadFile(join(__dirname, '../renderer/index.html'))
@@ -105,6 +105,7 @@ app.whenReady().then(() => {
 
   registerIPCHandlers({
     'search:thesaurus': (term: string) => searchThesaurus(term),
+    'tone:professional': (text: string) => toneProfessional(text)
   })
 })
 
