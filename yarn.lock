@@ -5292,19 +5292,6 @@ onetime@^6.0.0:
   dependencies:
     mimic-fn "^4.0.0"
 
-openai@4.97.0:
-  version "4.97.0"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.97.0.tgz#4e2e85c79499c1d44b58f97b3a8ec1d6bfe403b3"
-  integrity sha512-LRoiy0zvEf819ZUEJhgfV8PfsE8G5WpQi4AwA1uCV8SKvvtXQkoWUFkepD6plqyJQRghy2+AEPQ07FrJFKHZ9Q==
-  dependencies:
-    "@types/node" "^18.11.18"
-    "@types/node-fetch" "^2.6.4"
-    abort-controller "^3.0.0"
-    agentkeepalive "^4.2.1"
-    form-data-encoder "1.7.2"
-    formdata-node "^4.3.2"
-    node-fetch "^2.6.7"
-
 openai@^4.96.0:
   version "4.104.0"
   resolved "https://registry.yarnpkg.com/openai/-/openai-4.104.0.tgz#c489765dc051b95019845dab64b0e5207cae4d30"
@@ -5322,6 +5309,11 @@ openai@^5.12.1, openai@^5.3.0:
   version "5.12.2"
   resolved "https://registry.yarnpkg.com/openai/-/openai-5.12.2.tgz#512ab6b80eb8414837436e208f1b951442b97761"
   integrity sha512-xqzHHQch5Tws5PcKR2xsZGX9xtch+JQFz5zb14dGqlshmmDAFBFEWmeIpf7wVqWV+w7Emj7jRgkNJakyKE0tYQ==
+
+openai@^5.13.1:
+  version "5.13.1"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-5.13.1.tgz#485e0a60a222256463af3a89d387140f3ac8919f"
+  integrity sha512-Jty97Apw40znKSlXZL2YDap1U2eN9NfXbqm/Rj1rExeOLEnhwezpKQ+v43kIqojavUgm30SR3iuvGlNEBR+AFg==
 
 openapi-types@^12.1.3:
   version "12.1.3"
