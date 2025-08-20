@@ -1,7 +1,17 @@
 import { Button } from '@renderer/components/ui/button'
+import { useStore } from '@renderer/stores/useStore'
 import { TrendingUp, ChevronLeft, Clipboard } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
-export const BackBar = ({ onBack }: { onBack: () => void }): JSX.Element => {
+export const BackBar = (): JSX.Element => {
+  const { reset } = useStore()
+  const navigate = useNavigate()
+
+  const onBack = () => {
+    reset()
+    navigate('/')
+  }
+
   return (
     <div className='w-full bg-background sticky top-0 z-10 flex justify-between'>
       <Button

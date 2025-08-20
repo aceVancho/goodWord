@@ -17,13 +17,12 @@ import { Spinner } from '@renderer/components/Spinner'
 import { Skeletons } from '@renderer/components/Skeletons'
 
 export const Thesaurus = (): JSX.Element => {
-	const navigate = useNavigate()
 	const {
 		searchTerm,
 		fetchData,
     data,
     error,
-    isLoading
+    isLoading,
 	} = useStore()
 
 	const { ref, className, exit } = useAnimateCss({
@@ -52,8 +51,7 @@ export const Thesaurus = (): JSX.Element => {
 			ref={ref}
 			className={`${className} h-full bg-background`}
 		>
-			<BackBar onBack={() => navigate('/')} />
-			{/* <BackBar onBack={() => exit(() => navigate('/'))} /> // Uncomment to use exit animation on back */}
+			<BackBar />
 
 			<Card className='@container/card rounded-none border-0 bg-background shadow-none'>
 				<CardHeader className='py-1 px-6'>
