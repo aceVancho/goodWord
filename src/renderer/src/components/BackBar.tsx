@@ -26,7 +26,7 @@ export const BackBar = (): JSX.Element => {
         variant="ghost"
         size="icon"
         className="mt-3 mr-2 size-6"
-        onClick={onBack}
+        onClick={() => navigate('/copied-text')}
       >
         <Clipboard className='h-4 w-4'/>
       </Button>

@@ -12,6 +12,7 @@ import { Thesaurus } from './views/Thesaurus'
 import 'animate.css'
 import { Skeletons } from './components/Skeletons'
 import { ToneMenu } from './views/ToneMenu'
+import { CopiedTextCard } from './views/CopiedTextCard'
 
 const App: FC = () => {
 	return (
@@ -37,6 +38,10 @@ const App: FC = () => {
 						<Route
 							path='/loading'
 							element={<Skeletons />}
+						/>
+						<Route
+							path='/copied-text'
+							element={<CopiedTextCard />}
 						/>
 					</Routes>
 				</HashRouter>
