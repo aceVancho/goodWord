@@ -40,6 +40,7 @@ export const searchThesaurus = async (term: string): Promise<ThesaurusResultType
 		})
 	).then(results => results.map(result => result.synonyms).flat())
 
+  // TODO — Feature — "Load More" button on the frontend. Application gets a quick result and is able to load batches on demand.
 	const combinedResults = Array.from(new Set([...aiResults, ...mobyResults]))
   const promises: Promise<any>[] = []
   const maxBatches = Math.ceil(combinedResults.length / 50)
