@@ -1,19 +1,25 @@
 import { Button } from '@renderer/components/ui/button'
 import { useStore } from '@renderer/stores/useStore'
-import { TrendingUp, ChevronLeft, Clipboard } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { TrendingUp, ChevronLeft, Clipboard, ClipboardX } from 'lucide-react'
+import { useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 export const BackBar = (): JSX.Element => {
-  const { reset } = useStore()
+  const { reset, setSearchTerm } = useStore()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const onBack = () => {
     reset()
     navigate('/')
   }
 
+  useEffect(() => {
+    if (location.pathname === '/') console.log('BackBar: onBack called from menu')
+  }, [location])
+
   return (
-    <div className='w-full bg-background sticky top-0 z-10 flex justify-between'>
+    <div className='w-full bg-background sticky top-0 z-10 flex justify-between border-b pb-2'>
       <Button
         variant="ghost"
         size="icon"
@@ -22,7 +28,8 @@ export const BackBar = (): JSX.Element => {
       >
         <ChevronLeft className='h-4 w-4'/>
       </Button>
-      <Button
+      {location.pathname !== '/copied-text' ? (
+              <Button
         variant="ghost"
         size="icon"
         className="mt-3 mr-2 size-6"
@@ -30,6 +37,14 @@ export const BackBar = (): JSX.Element => {
       >
         <Clipboard className='h-4 w-4'/>
       </Button>
+      ) : (              <Button
+        variant="ghost"
+        size="icon"
+        className="mt-3 mr-2 size-6"
+        onClick={() => navigate('/copied-text')}
+      >
+        <ClipboardX onClick={() => setSearchTerm('')} className='h-4 w-4'/>
+      </Button>)}
     </div>
   )
 }

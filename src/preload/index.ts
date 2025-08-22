@@ -25,6 +25,13 @@ const api = {
 			console.log('preload.js: => onCopyText:', text)
 			callback(text)
 		})
+	},
+	onClipboardChanged: (callback: (text: string) => void): void => {
+		// callback('Test send of onClipboardChanged outside ipcRenderer.on')
+		ipcRenderer.on('clipboard:changed', (_, text) => {
+			console.log('preload.js: => onClipboardChanged:', text)
+			callback(text)
+		})
 	}
 }
 

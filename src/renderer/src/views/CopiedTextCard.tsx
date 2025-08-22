@@ -1,49 +1,20 @@
-import {
-	Drawer,
-	DrawerClose,
-	DrawerContent,
-	DrawerDescription,
-	DrawerFooter,
-	DrawerHeader,
-	DrawerTitle,
-	DrawerTrigger
-} from '../components/ui/drawer'
-import { Button } from '../components/ui/button'
-import { TrendingUp, ChevronLeft, Clipboard } from 'lucide-react'
 import { useStore } from '@renderer/stores/useStore'
-import { ScrollArea } from '../components/ui/scroll-area'
+import { BackBar } from '@renderer/components/BackBar'
 
 export const CopiedTextCard = () => {
-	const { searchTerm, setSearchTerm } = useStore()
-  const navigate = useNavigate()
-  const emptyClipboard = <div className='text-medium text-muted-foreground font-normal text-center pb-40'>🙈 The clipboard is empty</div  >
+	const { searchTerm } = useStore()
+	const emptyClipboard = (
+		<div className='text-medium text-center font-normal text-muted-foreground'>
+			🙈 The clipboard is empty
+		</div>
+	)
 	return (
-    <Card className="w-full flex flex-col justify-between items-center h-screen border-0">
-      <CardHeader>
-        <CardTitle>📋 Copied Text</CardTitle>
-      </CardHeader>
-      <CardContent className='ml-2 font-thin text-left whitespace-pre-wrap'>
+		<div className='flex flex-col bg-background'>
+			<BackBar />
+      <div className='text-secondary-foreground flex justify-center align-center p-4 whitespace-pre-wrap font-medium'>
         {searchTerm ? searchTerm : emptyClipboard}
-      </CardContent>
-      <CardFooter className="flex gap-4">
-        <Button onClick={() => navigate(-1)} variant="outline" className="w-full">
-          Back
-        </Button>
-        <Button onClick={() => setSearchTerm('')} variant="outline" className="bg-primary w-full">
-          Clear Clipboard
-        </Button>
-      </CardFooter>
-    </Card>
+      </div>
+
+		</div>
 	)
 }
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../components/ui/card"
-import { useNavigate } from 'react-router-dom'
-

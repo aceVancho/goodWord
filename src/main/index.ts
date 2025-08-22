@@ -25,8 +25,8 @@ const simulateCopyFn = async () => {
 async function createMenuOverlayWindow(): Promise<BrowserWindow> {
 	const { x, y } = screen.getCursorScreenPoint()
 	const win = new BrowserWindow({
-		width: 300,
-		height: 400,
+		width: 350,
+		height: 450,
 		// width: 1000,
 		// height: 1000,
 		x,
@@ -86,12 +86,25 @@ const initMenu = async (): Promise<void> => {
 		console.log('index.ts: copiedText => preload:', copiedText)
 		menu.webContents.send('copy-text', copiedText)
 	})
+
+  watchClipboard(menu)
 }
 
 const registerIPCHandlers = (map: Record<string, (...a:any[]) => any>) => {
   for (const [channel, fn] of Object.entries(map)) {
     ipcMain.handle(channel, (_e, ...args) => fn(...args));
   }
+}
+
+let last = ''
+const watchClipboard = (win: BrowserWindow) => {
+  setInterval(() => {
+    const text = clipboard.readText()
+    if (text && text !== last) {
+      last = text
+      win.webContents.send('clipboard:changed', text)
+    }
+  }, 500)
 }
 
 app.whenReady().then(() => {

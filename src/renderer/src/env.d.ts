@@ -4,6 +4,7 @@ declare global {
 	interface Window {
 		api: {
 			onCopyText: (callback: (text: string) => void) => void,
+			onClipboardChanged: (callback: (text: string) => void) => void,
       invoke: (channel: string, ...args: any[]) => Promise<any>,
       on: (channel: string, listener: (...args: any[]) => void) => void,
       off: (channel: string, listener: (...args: any[]) => void) => void // <-- new
