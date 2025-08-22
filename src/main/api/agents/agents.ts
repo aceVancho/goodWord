@@ -1,91 +1,94 @@
 import { ChatOpenAI } from '@langchain/openai'
 import { z } from 'zod'
 import { prompts } from '../promps/prompts'
-import OpenAI from "openai";
-import { zodTextFormat } from "openai/helpers/zod";
+import OpenAI from 'openai'
+import { zodTextFormat } from 'openai/helpers/zod'
+import { zodSchemas } from '../schemas'
+const moby = require('moby')
 
-const synonymsSchema = z.object({
-	veryCommon: z.array(z.string()),
-	common: z.array(z.string()),
-	uncommon: z.array(z.string()),
-	rare: z.array(z.string()).min(3),
-	archaic: z.array(z.string()).min(3),
-})
+// TODO: Feature: Add ability to gather dictionary/thesaurus results for multiple meanings of the same word
+// import natural from "natural"
+// import * as wndb from "wordnet-db"
+// import WordPOS from "wordpos"
+// const wp = new WordPOS({ wordnetPath: (wndb as any).path })
+// const wn = new natural.WordNet((wndb as any).path)
+// console.log(await wp.lookupAdjective(term))
+// console.log(await wp.lookup(term))
 
-const superThesaurusSchema = z.object({
-  synonyms: z.array(z.string())
-})
-
-const model = new ChatOpenAI({
-	temperature: .3,
-  topP: 0.85,
-  // frequencyPenalty: 0.6,
-	model: 'gpt-4.1',
-	maxTokens: -1
-}).withStructuredOutput<typeof superThesaurusSchema._type>(superThesaurusSchema)
-const model2 = new ChatOpenAI({
-	temperature: .3,
-  topP: 0.85,
-  // frequencyPenalty: 0.6,
-	model: 'gpt-4.1',
-	maxTokens: -1
-}).withStructuredOutput<typeof synonymsSchema._type>(synonymsSchema)
-
-// export const searchThesaurus = async (term: string): Promise<typeof synonymsSchema._type> =>
-// 	await model.invoke(prompts.thesaurus(term), {
-// 		configurable: { thread_id: '420' }
-// 	})
-
-export const superSearchThesaurus = async (term: string): Promise<any> => {
-  const levels = ['', 'very common', 'common', 'uncommon', 'rare', 'archaic']
-
-  const results = await Promise.all(levels.map(level => {
-    return model.invoke(prompts.superThesaurus(term, level), {
-		configurable: { thread_id: '420' }
-  })
-  }))
-
-  console.log('Before cleaned results:', results)
-
-  const setResults = Array.from(new Set(results.map((result) => result.synonyms).flat()))
-
-  console.log('Set Results:', setResults)
-  const cleanedResults = await model2.invoke(prompts.categorizeThesaurusResults(setResults, term), {configurable: { thread_id: '420' }})
-
-  console.log('cleanedResults:', cleanedResults)
-  return cleanedResults
+const createModelWithSchema = (schema: z.ZodTypeAny) => {
+	return new ChatOpenAI({
+		temperature: 0.3,
+		topP: 0.85,
+		// frequencyPenalty: 0.6,
+		model: 'gpt-4.1',
+		maxTokens: -1
+	}).withStructuredOutput<typeof schema._type>(schema)
 }
 
-export const toneProfessional = async (text: string): Promise<typeof toneSchemas.professional._type | null> => {
-  const openai = new OpenAI();
+type ThesaurusResultType = typeof zodSchemas.thesaurusSchemas.thesaurus._type
 
-  const toneSchemas = {
-    professional: z.object({
-      output: z.array(z.string()).length(3),
-    })
+export const searchThesaurus = async (term: string): Promise<ThesaurusResultType> => {
+	const thesaurusModel = createModelWithSchema(zodSchemas.thesaurusSchemas.thesaurus)
+	const synonymsModel = createModelWithSchema(zodSchemas.thesaurusSchemas.synonyms)
+	const tiers = ['very common', 'common', 'uncommon', 'rare', 'obscure']
+	const mobyResults = new Set(moby.search(term))
+	const aiResults = await Promise.all(
+		tiers.map(level => {
+			return thesaurusModel.invoke(prompts.searchThesaurus(term, level), {
+				configurable: { thread_id: '420' }
+			})
+		})
+	).then(results => results.map(result => result.synonyms).flat())
+
+	const combinedResults = Array.from(new Set([...aiResults, ...mobyResults]))
+  const promises: Promise<any>[] = []
+  const maxBatches = Math.ceil(combinedResults.length / 50)
+  for (let i = 0; i < maxBatches; i++) {
+    const batch = combinedResults.slice(i * 50, (i + 1) * 50)
+    const promise = thesaurusModel
+		.invoke(prompts.cleanThesaurusResults(term, batch), {
+			configurable: { thread_id: '420' }
+		})
+    promises.push(promise)
   }
 
-  const response = await openai.responses.parse({
-    model: "gpt-5",
-    max_output_tokens: 25000,
-    input: [
-      { role: "system", content: "You are an AI word processing assistant. Your objective is to use the user provided text to improve its professional tone. You will respond in JSON format and provide 3 different responses." },
-      {
-        role: "user",
-        content: `${text}`,
-      },
-    ],
-    text: {
-      format: zodTextFormat(toneSchemas.professional, "professional_tone"),
-    },
-      reasoning: {
-    effort: "high"
-  }
+  const cleanedResults = await (await Promise.all(promises)).map(result => result.synonyms).flat()
+	const categorizedResults = await synonymsModel.invoke(
+		prompts.categorizeThesaurusResults(term, cleanedResults),
+		{ configurable: { thread_id: '420' } }
+	)
 
-  });
-
-  console.log('toneProfessional response:', response.output_parsed);
-  return response.output_parsed;
+	return categorizedResults
 }
 
+type ToneProfessionalType = typeof zodSchemas.toneSchemas.professional._type
+export const toneProfessional = async (
+	text: string
+): Promise<ToneProfessionalType | null> => {
+	const openai = new OpenAI()
 
+	const response = await openai.responses.parse({
+		model: 'gpt-5',
+		max_output_tokens: 25000,
+		input: [
+			{
+				role: 'system',
+				content:
+					'You are an AI word processing assistant. Your objective is to use the user provided text to improve its professional tone. You will respond in JSON format and provide 3 different responses.'
+			},
+			{
+				role: 'user',
+				content: `${text}`
+			}
+		],
+		text: {
+			format: zodTextFormat(zodSchemas.toneSchemas.professional, 'professional_tone')
+		},
+		reasoning: {
+			effort: 'high'
+		}
+	})
+
+	console.log('toneProfessional response:', response.output_parsed)
+	return response.output_parsed
+}

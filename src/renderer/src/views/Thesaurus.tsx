@@ -44,7 +44,7 @@ export const Thesaurus = (): JSX.Element => {
     <div className="text-red-500">{error}</div>
   )
 
-	const TIERS = ['veryCommon', 'common', 'uncommon', 'rare', 'archaic']
+	const TIERS = ['veryCommon', 'common', 'uncommon', 'rare', 'obscure']
 
   if (!isLoading && data) return (
 		<div
