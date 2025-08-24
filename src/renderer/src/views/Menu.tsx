@@ -43,7 +43,7 @@ export function Menu(): JSX.Element {
 
 	return (
       <div className='w-full h-screen flex flex-col items-center justify-center'>
-        <BackBar />
+        {/* <BackBar /> */}
         <Command className=''>
           <CommandList>
             <CommandGroup heading='Language'>

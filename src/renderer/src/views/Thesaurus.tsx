@@ -50,7 +50,7 @@ export const Thesaurus = (): JSX.Element => {
 				ref={ref}
 				className={`${className} h-full bg-background`}
 			>
-				<BackBar />
+				{/* <BackBar /> */}
 
 				<Card className='@container/card rounded-none border-0 bg-background shadow-none'>
 					<CardHeader className='px-6 py-1'>

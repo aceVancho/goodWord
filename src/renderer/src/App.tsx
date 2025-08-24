@@ -13,6 +13,7 @@ import 'animate.css'
 import { Skeletons } from './components/Skeletons'
 import { ToneMenu } from './views/ToneMenu'
 import { CopiedTextCard } from './views/CopiedTextCard'
+import { BackBar } from './components/BackBar'
 
 const App: FC = () => {
 	return (
@@ -22,6 +23,7 @@ const App: FC = () => {
 				storageKey='vite-ui-theme'
 			>
 				<HashRouter>
+        <BackBar />
 					<Routes>
 						<Route
 							path='/'

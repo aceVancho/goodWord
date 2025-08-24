@@ -11,7 +11,8 @@ export const BackBar = (): JSX.Element => {
 
   const onBack = () => {
     // reset() // TODO: this needs tested
-    navigate('/')
+    navigate(-1)
+    // navigate('-1')
   }
 
   useEffect(() => {
