@@ -10,7 +10,7 @@ import {
 import { join } from 'path'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { keyboard, Key } from '@nut-tree-fork/nut-js'
-import { searchThesaurus, toneProfessional } from './api/agents/agents'
+import { searchThesaurus, simpleSearchThesaurus, toneProfessional } from './api/agents/agents'
 
 const simulateCopyFn = async () => {
 	// Simulate Cmd+C (on macOS)
@@ -117,7 +117,8 @@ app.whenReady().then(() => {
 	globalShortcut.register('Option+Space', initMenu)
 
   registerIPCHandlers({
-    'search:thesaurus': (term: string) => searchThesaurus(term),
+    'search:thesaurus': (term: string) => simpleSearchThesaurus(term),
+    // 'search:thesaurus': (term: string) => searchThesaurus(term),
     'tone:professional': (text: string) => toneProfessional(text)
   })
 })

@@ -10,7 +10,7 @@ export const BackBar = (): JSX.Element => {
   const location = useLocation()
 
   const onBack = () => {
-    reset()
+    // reset() // TODO: this needs tested
     navigate('/')
   }
 
@@ -23,7 +23,7 @@ export const BackBar = (): JSX.Element => {
       <Button
         variant="ghost"
         size="icon"
-        className="mt-3 ml-2 size-6"
+        className="mt-3 ml-2 size-7"
         onClick={onBack}
       >
         <ChevronLeft className='h-4 w-4'/>
@@ -38,9 +38,9 @@ export const BackBar = (): JSX.Element => {
         <Clipboard className='h-4 w-4'/>
       </Button>
       ) : (              <Button
-        variant="ghost"
+        variant="destructive"
         size="icon"
-        className="mt-3 mr-2 size-6"
+        className="mt-3 mr-2 size-7"
         onClick={() => navigate('/copied-text')}
       >
         <ClipboardX onClick={() => setSearchTerm('')} className='h-4 w-4'/>

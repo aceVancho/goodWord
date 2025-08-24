@@ -15,17 +15,54 @@ const moby = require('moby')
 // console.log(await wp.lookupAdjective(term))
 // console.log(await wp.lookup(term))
 
+
+
 const createModelWithSchema = (schema: z.ZodTypeAny) => {
 	return new ChatOpenAI({
-		temperature: 0.3,
-		topP: 0.85,
+		// temperature: 0.3,
+		// topP: 0.85,
 		// frequencyPenalty: 0.6,
-		model: 'gpt-4.1',
+		model: 'gpt-5-nano',
 		maxTokens: -1
 	}).withStructuredOutput<typeof schema._type>(schema)
 }
 
 type ThesaurusResultType = typeof zodSchemas.thesaurusSchemas.thesaurus._type
+
+export const simpleSearchThesaurus = async (term: string): Promise<any> => {
+	const openai = new OpenAI()
+
+	const response = await openai.responses.parse({
+		model: 'gpt-5-mini',
+		max_output_tokens: 25000,
+		input: [
+			{
+				role: 'system',
+				content: prompts.simpleSearchThesaurus(term)[0].text
+      },
+			{
+				role: 'user',
+				content: `${term}`
+			}
+		],
+		text: {
+			format: zodTextFormat(zodSchemas.thesaurusSchemas.synonyms, 'professional_tone')
+		},
+		reasoning: {
+			effort: 'low'
+		}
+	})
+
+	console.log('AI response:', response.output_parsed)
+	return response.output_parsed
+}
+// export const simpleSearchThesaurus = async (term: string): Promise<ThesaurusResultType[]> => {
+// 	const thesaurusModel = createModelWithSchema(zodSchemas.thesaurusSchemas.synonyms)
+// 	const result = await thesaurusModel.invoke(prompts.simpleSearchThesaurus(term), {
+// 		configurable: { thread_id: '420' }
+// 	})
+// 	return result
+// }
 
 export const searchThesaurus = async (term: string): Promise<ThesaurusResultType> => {
 	const thesaurusModel = createModelWithSchema(zodSchemas.thesaurusSchemas.thesaurus)
@@ -42,6 +79,7 @@ export const searchThesaurus = async (term: string): Promise<ThesaurusResultType
 
   // TODO — Feature — "Load More" button on the frontend. Application gets a quick result and is able to load batches on demand.
 	const combinedResults = Array.from(new Set([...aiResults, ...mobyResults]))
+  console.log(`Combined Results: ${combinedResults}`)
   const promises: Promise<any>[] = []
   const maxBatches = Math.ceil(combinedResults.length / 50)
   for (let i = 0; i < maxBatches; i++) {

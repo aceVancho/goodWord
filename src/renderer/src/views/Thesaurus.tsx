@@ -23,6 +23,7 @@ export const Thesaurus = (): JSX.Element => {
     data,
     error,
     isLoading,
+    lastSearchTerm
 	} = useStore()
 
 	const { ref, className, exit } = useAnimateCss({
@@ -33,6 +34,7 @@ export const Thesaurus = (): JSX.Element => {
 
 	// Search
 	useEffect(() => {
+    if (lastSearchTerm === searchTerm) return;
     if (searchTerm) fetchData(searchTerm, 'search:thesaurus')
 	}, [searchTerm])
 
