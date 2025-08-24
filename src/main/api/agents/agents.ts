@@ -125,7 +125,7 @@ export const toneProfessional = async (
 			format: zodTextFormat(zodSchemas.toneSchemas.professional, 'professional_tone')
 		},
 		reasoning: {
-			effort: 'high'
+			effort: 'low'
 		}
 	})
 
