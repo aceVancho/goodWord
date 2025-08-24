@@ -128,7 +128,7 @@ export const ToneMenu = (): JSX.Element => {
 								onClick={() => {
 									if (!searchTerm) return
 									const searchType = `tone:${tone.label.split('/')[0].toLowerCase()}`
-									fetchData(searchTerm, searchType, tone.label)
+									fetchData(searchTerm, searchType)
 								}}
 							>
 								<CommandItem>

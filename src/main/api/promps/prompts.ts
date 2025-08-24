@@ -2,10 +2,10 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages"
 
 export const prompts = {
 
-  simpleSearchThesaurus: (term: string): [HumanMessage]  => ([new HumanMessage(`
+  searchThesaurus: (term: string): [HumanMessage]  => ([new HumanMessage(`
     You are an AI thesaurus-assistant responsible for returning synonyms for the term: '${term}'. Your response should be in JSON format. Results should be categorized into rarity tiers like: {veryCommon: string[], common: string[], uncommon: string[], rare: string[], obscure: string[]}. Extend your results to list as many synonyms as possible while remaining relevant to the term.
   `)]),
-  searchThesaurus: (term: string, level: string): [SystemMessage, HumanMessage] => ([new SystemMessage(`
+  deepSearchThesaurus: (term: string, level: string): [SystemMessage, HumanMessage] => ([new SystemMessage(`
     List as many ${level}-level, single-word synonyms as you can for the user given word. Results should be in JSON format as an array. {synonyms:['word1','word2','etc']}. Shoot for 20 synonyms. It's okay for it to be less. But don't repeat yourself or use variations of the same headword (e.g. "stiff", "stiffened", "stiffness")
   `),
   new HumanMessage(`Give me synonyms for this word: ${term}

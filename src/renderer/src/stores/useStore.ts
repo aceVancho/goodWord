@@ -23,8 +23,12 @@ export const useStore = create<State>(set => ({
 	lastSearchTerm: null,
 	setSearchTerm: (term: string | null): void => set({ searchTerm: term }),
 	reset: (): void => set({ isLoading: false, data: null, error: null }),
-	fetchData: async (searchTerm: string, searchType: string, label?: string): Promise<void> => {
-		set({ isLoading: true, error: null, searchTerm, searchType, label, lastSearchTerm: searchTerm })
+	fetchData: async (searchTerm: string, searchType: string): Promise<void> => {
+    // TODO: Deep Search
+    // const searchTypeSplit = searchType.split(':');
+    // const searchSubType = searchTypeSplit[searchTypeSplit.length - 1]
+		// set({ isLoading: searchSubType !== 'deep' ? true : false, error: null, searchTerm, searchType, lastSearchTerm: searchTerm })
+		set({ isLoading: true, error: null, searchTerm, searchType, lastSearchTerm: searchTerm })
     searchType = searchType.trim().toLowerCase();
 		try {
 			const result = await window.api.invoke(searchType, searchTerm)

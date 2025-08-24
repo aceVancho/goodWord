@@ -29,7 +29,7 @@ const createModelWithSchema = (schema: z.ZodTypeAny) => {
 
 type ThesaurusResultType = typeof zodSchemas.thesaurusSchemas.thesaurus._type
 
-export const simpleSearchThesaurus = async (term: string): Promise<any> => {
+export const searchThesaurus = async (term: string): Promise<any> => {
 	const openai = new OpenAI()
 
 	const response = await openai.responses.parse({
@@ -38,7 +38,7 @@ export const simpleSearchThesaurus = async (term: string): Promise<any> => {
 		input: [
 			{
 				role: 'system',
-				content: prompts.simpleSearchThesaurus(term)[0].text
+				content: prompts.searchThesaurus(term)[0].text
       },
 			{
 				role: 'user',
@@ -64,14 +64,14 @@ export const simpleSearchThesaurus = async (term: string): Promise<any> => {
 // 	return result
 // }
 
-export const searchThesaurus = async (term: string): Promise<ThesaurusResultType> => {
+export const deepSearchThesaurus = async (term: string): Promise<ThesaurusResultType> => {
 	const thesaurusModel = createModelWithSchema(zodSchemas.thesaurusSchemas.thesaurus)
 	const synonymsModel = createModelWithSchema(zodSchemas.thesaurusSchemas.synonyms)
 	const tiers = ['very common', 'common', 'uncommon', 'rare', 'obscure']
 	const mobyResults = new Set(moby.search(term))
 	const aiResults = await Promise.all(
 		tiers.map(level => {
-			return thesaurusModel.invoke(prompts.searchThesaurus(term, level), {
+			return thesaurusModel.invoke(prompts.deepSearchThesaurus(term, level), {
 				configurable: { thread_id: '420' }
 			})
 		})
@@ -97,6 +97,7 @@ export const searchThesaurus = async (term: string): Promise<ThesaurusResultType
 		{ configurable: { thread_id: '420' } }
 	)
 
+  categorizedResults.isDeepSearchComplete = true;
 	return categorizedResults
 }
 
