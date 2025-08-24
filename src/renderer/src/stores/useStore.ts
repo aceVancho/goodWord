@@ -27,6 +27,7 @@ export const useStore = create<State>(set => ({
     // TODO: Deep Search
     // const searchTypeSplit = searchType.split(':');
     // const searchSubType = searchTypeSplit[searchTypeSplit.length - 1]
+    // or use this: const searchSubType = searchType.split(':')[searchType.split(':').length - 1]
 		// set({ isLoading: searchSubType !== 'deep' ? true : false, error: null, searchTerm, searchType, lastSearchTerm: searchTerm })
 		set({ isLoading: true, error: null, searchTerm, searchType, lastSearchTerm: searchTerm })
     searchType = searchType.trim().toLowerCase();
